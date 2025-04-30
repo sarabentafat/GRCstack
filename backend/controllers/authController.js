@@ -51,63 +51,43 @@ const validateResetPassword = (data) => {
  * @access  public
  * ----------------------------------------------*/
 module.exports.registerUserCtrl = asyncHandler(async (req, res) => {
-  const { error } = validateRegisterUser(req.body);
+  const { error } = validateRegisterUser(req.body); 
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
   }
 
-  // Check if user already exists
   let user = await User.findOne({ email: req.body.email });
   if (user) {
     return res.status(400).json({ message: "User already exists" });
   }
 
-  // Hash the password
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
-  // Ensure the field, subfield, and level exist
-  let field = await Field.findById(req.body.field);
-  let subfield = await Subfield.findById(req.body.subfield);
-  let level = await Level.findById(req.body.level);
-  let year = await Year.findById(req.body.year); // Check year if needed
-
-  if (!field || !subfield || !level || !year) {
-    return res
-      .status(400)
-      .json({ message: "Invalid field, subfield, level, or year ID" });
-  }
-
-  // Create a new user and save it to the database
   user = new User({
     username: req.body.username,
-    // firstname: req.body.firstname,
-    // secondname: req.body.secondname,
     gender: req.body.gender,
     email: req.body.email,
     password: hashedPassword,
-    level: req.body.level, // Save the level ID
-    field: req.body.field, // Referencing the field ID
-    subfield: req.body.subfield, // Referencing the subfield ID
-    year: req.body.year, // Referencing the year ID if used
     phonenumber: req.body.phonenumber,
     address: req.body.address,
-    referralsource:req.body.referralsource
   });
 
   await user.save();
-  //email verification 
+
   const token = await new Token({
     userId: user._id,
     token: crypto.randomBytes(32).toString("hex"),
   }).save();
 
-  const url=`${process.env.BASE_URL}api/auth/${user._id}/verify/${token.token}`
-  await sendEmail(user.email,"Verify Email",url)
+  const url = `${process.env.BASE_URL}api/auth/${user._id}/verify/${token.token}`;
+  await sendEmail(user.email, "Verify Email", url);
 
-  // Send a response to the client
-  res.status(201).json({ message: "An email sent to your account please verify " });
+  res
+    .status(201)
+    .json({ message: "An email sent to your account please verify " });
 });
+
 
 /**----------------------------------------------
  * @desc    Check if either email or username exists

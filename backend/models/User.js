@@ -14,20 +14,6 @@ const UserSchema = new Schema(
       minlength: 3,
       maxlength: 100,
     },
-    // firstname: {
-    //   type: String,
-    //   required: true,
-    //   trim: true,
-    //   minlength: 3,
-    //   maxlength: 100,
-    // },
-    // secondname: {
-    //   type: String,
-    //   required: true,
-    //   trim: true,
-    //   minlength: 3,
-    //   maxlength: 100,
-    // },
     gender: {
       type: String,
       enum: ["male", "female"], // You can define your own set of genders or add more options as needed
@@ -68,44 +54,6 @@ const UserSchema = new Schema(
       type: Boolean,
       default: false,
     },
-    // existing fields
-    referralsource: {
-      type: String,
-      enum: ["Facebook", "Ami/Famille", "Instagram", "Tiktok", "Autre"],
-      required: true,
-    },
-    statistics: {
-      streakDays: {
-        type: [String], // or Map if you prefer to use key-value pairs
-        default: [],
-      },
-      lastActivityDate: {
-        type: Date,
-        default: null,
-      },
-      streakLength: {
-        type: Number,
-        default: 0, // Initialize streak length to 0
-      },
-      totalScore: {
-        type: Number,
-        default: 0,
-      },
-      badges: [
-        {
-          name: String,
-          dateEarned: Date,
-        },
-      ],
-      achievements: [
-        {
-          title: String,
-          description: String,
-          dateAchieved: Date,
-        },
-      ],
-    },
-
     phonenumber: {
       type: String, // Changed to String for phone numbers
       required: true,
@@ -116,26 +64,7 @@ const UserSchema = new Schema(
       type: Boolean,
       default: false,
     }, // New field for subscription status
-    level: {
-      type: Schema.Types.ObjectId,
-      ref: "Level",
-      required: true,
-    },
-    field: {
-      type: Schema.Types.ObjectId,
-      ref: "Field",
-      required: true,
-    },
-    subfield: {
-      type: Schema.Types.ObjectId,
-      ref: "Subfield",
-      required: true,
-    },
-    year: {
-      type: Schema.Types.ObjectId,
-      ref: "Year",
-      required: true,
-    },
+
     folder: {
       type: Schema.Types.ObjectId,
       ref: "Folder",
@@ -179,28 +108,11 @@ const User = mongoose.model("User", UserSchema);
 function validateRegisterUser(obj) {
   const schema = Joi.object({
     username: Joi.string().min(3).max(100).required(),
-    // firstname: Joi.string().min(3).max(100).required(),
-    // secondname: Joi.string().min(3).max(100).required(),
-    gender: Joi.string().valid("male", "female").required(),
+    gender: Joi.string().valid("male", "female").optional(),
     email: Joi.string().min(5).max(100).email().required(),
     address: Joi.string().min(2).optional(),
     password: Joi.string().min(7).required(),
     phonenumber: Joi.string().required(),
-    level: Joi.string()
-      .pattern(/^[0-9a-fA-F]{24}$/) // Validate ObjectId format
-      .required(),
-    field: Joi.string()
-      .pattern(/^[0-9a-fA-F]{24}$/) // Validate ObjectId format
-      .required(),
-    subfield: Joi.string()
-      .pattern(/^[0-9a-fA-F]{24}$/) // Validate ObjectId format
-      .required(),
-    year: Joi.string()
-      .pattern(/^[0-9a-fA-F]{24}$/) // Validate ObjectId format
-      .required(),
-    referralsource: Joi.string()
-      .valid("Facebook", "Ami/Famille", "Instagram", "Tiktok", "Autre")
-      .required(),
   });
   return schema.validate(obj);
 }

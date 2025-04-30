@@ -1,31 +1,32 @@
 const mongoose = require("mongoose");
-const { User } = require("./User");
-const Schema = mongoose.Schema;
 
-const levelSchema = new Schema(
+// Define the Level schema
+const LevelSchema = new mongoose.Schema(
   {
-    name: {
+    level: Number,
+    level_name: String,
+    identifier: String,
+    title: String,
+    content: String,
+    is_ratable: { type: Boolean, default: false },
+    status: {
       type: String,
-      enum: ["university", "highschool", "middle school", "other"],
-      required: true,
-      unique: true,
+      enum: ["Not Started", "In Progress", "Compliant", "Non-Compliant"],
+      default: "Not Started",
     },
-    // users: [
-    //   {
-    //     type: Schema.Types.ObjectId,
-    //     ref: "User",
-    //   }
-    // ],
-    fields: [
+    evidence: [
       {
-        type: Schema.Types.ObjectId,
-        ref: "Field", // Reference to the Field model
+        name: String,
+        fileUrl: String,
+        uploadedAt: { type: Date, default: Date.now },
       },
     ],
+    children: [this], // Recursive nesting (CAUTION: this is experimental)
   },
-  {
-    timestamps: true,
-  }
+  { _id: false }
 );
 
-module.exports = mongoose.model("Level", levelSchema);
+// Create the model using the schema
+const Level = mongoose.model("Level", LevelSchema);
+
+module.exports = Level;

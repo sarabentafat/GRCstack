@@ -49,14 +49,6 @@ module.exports.getAllUsersCtrl = asyncHandler(async (req, res) => {
 module.exports.getUserProfileCtrl = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id)
     .select("-password")
-    .populate({
-      path: "subfield",
-      populate: {
-        path: "years", // Assuming "years" is the name of the field in the Subfield schema
-      },
-    })
-    .populate("field level year")
-    .populate("statistics");
 
   if (!user) {
     res.status(404).json({ message: "User not found" });
