@@ -1,0 +1,209 @@
+{
+  "home": {
+    "home": "Home",
+    "about": "About",
+    "services": "Services",
+    "contact": "Contact",
+    "login": "Log In",
+    "welcome": "With Brainy, learn, test, and progress smartly.",
+    "learning_description": "Elevate your learning with interactive quizzes. We believe learning should be engaging and fun!",
+    "platform_description": "Our platform offers a unique way to test your knowledge, reinforce your learning, and challenge your friends—all while having fun.",
+    "signup": "Sign Up",
+    "image_placeholder": "Insert your image here"
+  },
+  "about": {
+    "section1": {
+      "title": "Use our flashcards and spaced repetition method to strengthen your long-term memory for better retention.",
+      "smallText": "Optimization of memorization",
+      "details": "Smart reminders will guide you through your revisions, helping you anchor knowledge permanently."
+    },
+    "section2": {
+      "title": "Track your performance in real time with clear and detailed graphs. Visualize your progress and analyze your results to adjust your learning strategy.",
+      "smallText": "Tracking your progress",
+      "details": "Detailed reports help you identify your strengths and focus your efforts where needed."
+    },
+    "section3": {
+      "title": "Take interactive quizzes tailored to your level. Get instant feedback to correct your mistakes and improve your skills.",
+      "smallText": "Test your knowledge",
+      "details": "Quizzes are regularly updated to reflect the latest trends and advancements in each field of study."
+    },
+    "section4": {
+      "title": "Access quizzes based on courses regularly updated by our team of experts, ensuring you always have current and relevant content.",
+      "smallText": "Regularly updated courses",
+      "details": "Quizzes are regularly updated to reflect the latest trends and advancements in each field of study."
+    }
+  },
+  "footer": {
+    "aboutUs": "About Us",
+    "aboutBrainy": "About Brainy",
+    "howItWorks": "How Brainy Works?",
+    "advertise": "Advertise with Us",
+    "getApp": "Get the App",
+    "resources": "Resources",
+    "helpCenter": "Help Center",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "contact": "Contact",
+    "followUs": "Follow Us",
+    "copyright": "© {{year}} Brainy. All rights reserved."
+  },
+  "motiv": {
+    "get_better_grades": "Get Better Grades with Algeria's #1 Learning Platform",
+    "discover_enhanced_learning": "Discover deeper learning withBrainy Plus",
+    "train_and_track": "Train and Track Your Progress",
+    "optimize_studies": "Optimize your studies with our cutting-edge AI features",
+    "millions_of_courses": "Millions of Trusted Courses",
+    "combined_power": "Understand tough assignments with the combined power of AI and expert-written solutions",
+    "advanced_tools": "Optimize Your Studies",
+    "level_up": "Level Up with Brainy Plus",
+    "modern_interface": "Enjoy a modern interface and smart learning tools to boost your academic results."
+  },
+  "login": {
+    "welcome": "Welcome",
+    "email_label": "Email",
+    "email_placeholder": "Enter your email",
+    "password_label": "Password",
+    "password_placeholder": "Enter your password",
+    "submit_button": "Login",
+    "no_account": "Don't have an account?",
+    "create_account": "Create one here",
+    "error_message": "An error occurred during login."
+  },
+  "signup": {
+    "title": "Sign Up",
+    "username": "Username",
+    "usernamePlaceholder": "Enter your username",
+    "email": "Email",
+    "emailPlaceholder": "Enter your email",
+    "phoneNumber": "Phone Number",
+    "phoneNumberPlaceholder": "Enter your phone number",
+    "gender": "Gender",
+    "genderPlaceholder": "Select your gender",
+    "genderMale": "Male",
+    "genderFemale": "Female",
+    "address": "Address",
+    "addressPlaceholder": "Enter your address",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "confirmPassword": "Confirm Password",
+    "confirmPasswordPlaceholder": "Confirm your password",
+    "checkAvailability": "Check Availability",
+    "next": "Next"
+  },
+  "errors": {
+    "usernameRequired": "Username is required",
+    "firstnameRequired": "First name is required",
+    "secondnameRequired": "Second name is required",
+    "emailRequired": "Email is required",
+    "emailInvalid": "Invalid email address",
+    "phonenumberRequired": "Phone number is required",
+    "genderRequired": "Gender is required",
+    "addressRequired": "Address is required",
+    "passwordRequired": "Password is required",
+    "passwordLength": "Password must be at least 6 characters long",
+    "passwordMismatch": "Passwords do not match",
+    "emailExists": "Email is already in use",
+    "usernameExists": "Username is already in use",
+    "verificationError": "An error occurred during verification",
+    "registrationFailed": "Registration failed"
+  },
+  "leftside": {
+    "brandName": "Brainy",
+    "home": "Home",
+    "explore": "Explore",
+    "modules": "My Modules",
+    "favorites": "My Favorites",
+    "settings": "Settings",
+    "shop": "Shop"
+  },
+  "store": {
+    "title": "Store",
+    "welcome": "Welcome to our store! Discover our premium plans and convert your gems.",
+    "gemIconAlt": "Gem icon",
+    "planOneMonth": {
+      "title": "Premium Plan - 1 month",
+      "description": "Full access for 1 month",
+      "price": "500 DA"
+    },
+    "planThreeMonths": {
+      "title": "Premium Plan - 3 months",
+      "description": "Full access for 3 months",
+      "price": "1200 DA"
+    },
+    "planSixMonths": {
+      "title": "Premium Plan - 6 months",
+      "description": "Full access for 6 months",
+      "price": "2200 DA"
+    },
+    "convertGems": {
+      "title": "Convert Gems",
+      "description": "Convert your gems into premium plans!",
+      "oneMonth": {
+        "title": "Premium Plan - 1 month",
+        "gems": "10 Gems"
+      },
+      "threeMonths": {
+        "title": "Premium Plan - 3 months",
+        "gems": "25 Gems"
+      },
+      "sixMonths": {
+        "title": "Premium Plan - 6 months",
+        "gems": "40 Gems"
+      }
+    },
+    "buy": "Buy",
+    "convert": "Convert"
+  },
+  "settings": {
+    "title": "Settings",
+    "personalInfo": "Personal Information",
+    "profilePicture": "Profile Picture",
+    "username": "Username",
+    "usernamePlaceholder": "Enter your username",
+    "bio": "Bio",
+    "bioPlaceholder": "Enter your bio",
+    "email": "Email",
+    "emailPlaceholder": "Enter your email",
+    "changePassword": "Change Password",
+    "currentPassword": "Current Password",
+    "newPassword": "New Password",
+    "changeLanguage": "Change Language",
+    "profileVisibility": "Profile Visibility",
+    "public": "Public",
+    "private": "Private",
+    "educationalCurriculum": "Educational Curriculum",
+    "level": "Level",
+    "saveChanges": "Save Changes",
+    "saving": "Saving...",
+    "changeProfilePicture": "Change Profile Picture",
+    "save": "Save",
+    "cancel": "Cancel"
+  },
+  "classes": {
+    "title": "Recently Created Packets"
+  },
+  "packet": {
+    "loading": "Loading...",
+    "Flashcards": "Flashcards",
+    "Quiz": "Quiz",
+    "MatchingGame": "Matching Game",
+    "Test": "Test",
+    "createdBy": "Created by",
+    "share": "Share",
+    "questions": "Packet Questions",
+    "noData": "No data available"
+  },
+  "matchinggame": {
+    "game_title": "Ready to Play?",
+    "game_instructions": "Match all the terms with their definitions as quickly as possible",
+    "start_game": "Start Game",
+    "rounds_label": "Rounds:",
+    "timer_label": "Timer duration (in minutes):",
+    "results_congratulations": "Congratulations! You've completed the game.",
+    "results_title": "Game Over!",
+    "results_replay": "Play Again"
+  },
+  "ad": {
+    "message": "Create a 100% free account as one of our first subscribers! Offer valid for only 1 month!"
+  }
+}

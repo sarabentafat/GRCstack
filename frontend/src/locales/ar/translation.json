@@ -1,0 +1,210 @@
+{
+  "home": {
+    "home": "الرئيسية",
+    "about": "من نحن",
+    "services": "الخدمات",
+    "contact": "اتصل بنا",
+    "login": "تسجيل الدخول",
+
+    "welcome": "مرحبًا بكم برايني",
+    "learning_description": "ارتقِ بتعلمك مع الاختبارات التفاعلية. نحن نؤمن بأن التعلم يجب أن يكون ممتعًا ومشوقًا!",
+    "platform_description": "توفر منصتنا طريقة فريدة لاختبار معرفتك وتعزيز تعلمك وتحدي أصدقائك - وكل ذلك أثناء الاستمتاع.",
+    "signup": "سجل الآن",
+    "image_placeholder": "أضف صورتك هنا"
+  },
+  "about": {
+    "section1": {
+      "title": "استخدم بطاقاتنا التعليمية وطريقة التكرار المتباعد لتعزيز ذاكرتك طويلة المدى لتحقيق استيعاب أفضل.",
+      "smallText": "تحسين الحفظ",
+      "details": "ستوجهك التذكيرات الذكية خلال مراجعاتك، مما يساعدك على ترسيخ المعرفة بشكل دائم."
+    },
+    "section2": {
+      "title": "تتبع أدائك في الوقت الفعلي من خلال رسوم بيانية واضحة ومفصلة. راقب تقدمك وحلل نتائجك لتعديل استراتيجيتك التعليمية.",
+      "smallText": "متابعة تقدمك",
+      "details": "التقارير التفصيلية تساعدك في تحديد نقاط قوتك وتركيز جهودك حيثما كان ذلك ضروريًا."
+    },
+    "section3": {
+      "title": "شارك في اختبارات تفاعلية تتناسب مع مستواك. احصل على ملاحظات فورية لتصحيح أخطائك وتحسين مهاراتك.",
+      "smallText": "اختبر معلوماتك",
+      "details": "يتم تحديث الاختبارات بانتظام لتعكس أحدث الاتجاهات والتطورات في كل مجال دراسي."
+    },
+    "section4": {
+      "title": "احصل على اختبارات مستندة إلى دروس يتم تحديثها بانتظام من قبل فريق الخبراء لدينا، مما يضمن لك محتوى دائم الحداثة والملاءمة.",
+      "smallText": "دروس محدثة بانتظام",
+      "details": "يتم تحديث الاختبارات بانتظام لتعكس أحدث الاتجاهات والتطورات في كل مجال دراسي."
+    }
+  },
+  "footer": {
+    "aboutUs": "معلومات عنا",
+    "aboutBrainy": "عن برايني",
+    "howItWorks": "كيف يعمل برايني؟",
+    "advertise": "الإعلان معنا",
+    "getApp": "احصل على التطبيق",
+    "resources": "الموارد",
+    "helpCenter": "مركز المساعدة",
+    "privacyPolicy": "سياسة الخصوصية",
+    "termsOfService": "شروط الخدمة",
+    "contact": "اتصل بنا",
+    "followUs": "تابعنا",
+    "copyright": "© {{year}} برايني. جميع الحقوق محفوظة."
+  },
+  "motiv": {
+    "get_better_grades": "احصل على درجات أفضل مع أفضل منصة تعليمية في الجزائر",
+    "discover_enhanced_learning": "اكتشف تعلمًا أعمق مع Brainy Plus",
+    "train_and_track": "تدرب وتابع تقدمك",
+    "optimize_studies": "حسن دراستك مع ميزات الذكاء الاصطناعي المتقدمة لدينا",
+    "millions_of_courses": "ملايين الدورات الموثوقة",
+    "combined_power": "افهم الواجبات الصعبة بفضل القوة المشتركة للذكاء الاصطناعي والحلول التي كتبها الخبراء",
+    "advanced_tools": "حسن دراستك",
+    "level_up": "انتقل إلى المستوى التالي مع Brainy Plus",
+    "modern_interface": "استمتع بواجهة حديثة وأدوات تعليمية ذكية لتحسين نتائجك الأكاديمية."
+  },
+  "login": {
+    "welcome": "مرحبا",
+    "email_label": "البريد الإلكتروني",
+    "email_placeholder": "أدخل بريدك الإلكتروني",
+    "password_label": "كلمة المرور",
+    "password_placeholder": "أدخل كلمة المرور الخاصة بك",
+    "submit_button": "تسجيل الدخول",
+    "no_account": "ليس لديك حساب؟",
+    "create_account": "قم بإنشاء واحد هنا",
+    "error_message": "حدث خطأ أثناء تسجيل الدخول."
+  },
+  "signup": {
+    "title": "التسجيل",
+    "username": "اسم المستخدم",
+    "usernamePlaceholder": "أدخل اسم المستخدم",
+    "email": "البريد الإلكتروني",
+    "emailPlaceholder": "أدخل بريدك الإلكتروني",
+    "phoneNumber": "رقم الهاتف",
+    "phoneNumberPlaceholder": "أدخل رقم هاتفك",
+    "gender": "الجنس",
+    "genderPlaceholder": "اختر جنسك",
+    "genderMale": "ذكر",
+    "genderFemale": "أنثى",
+    "address": "العنوان",
+    "addressPlaceholder": "أدخل عنوانك",
+    "password": "كلمة المرور",
+    "passwordPlaceholder": "أدخل كلمة المرور",
+    "confirmPassword": "تأكيد كلمة المرور",
+    "confirmPasswordPlaceholder": "أكد كلمة المرور",
+    "checkAvailability": "التحقق من التوافر",
+    "next": "التالي"
+  },
+  "errors": {
+    "usernameRequired": "اسم المستخدم مطلوب",
+    "firstnameRequired": "الاسم الأول مطلوب",
+    "secondnameRequired": "اسم العائلة مطلوب",
+    "emailRequired": "البريد الإلكتروني مطلوب",
+    "emailInvalid": "عنوان البريد الإلكتروني غير صالح",
+    "phonenumberRequired": "رقم الهاتف مطلوب",
+    "genderRequired": "الجنس مطلوب",
+    "addressRequired": "العنوان مطلوب",
+    "passwordRequired": "كلمة المرور مطلوبة",
+    "passwordLength": "يجب أن تحتوي كلمة المرور على 6 أحرف على الأقل",
+    "passwordMismatch": "كلمات المرور غير متطابقة",
+    "emailExists": "البريد الإلكتروني مستخدم بالفعل",
+    "usernameExists": "اسم المستخدم مستخدم بالفعل",
+    "verificationError": "حدث خطأ أثناء التحقق",
+    "registrationFailed": "فشلت عملية التسجيل"
+  },
+  "leftside": {
+    "brandName": "برايني",
+    "home": "الرئيسية",
+    "explore": "استكشاف",
+    "modules": "موادي",
+    "favorites": "المفضلات",
+    "settings": "الإعدادات",
+    "shop": "المتجر"
+  },
+  "store": {
+    "title": "المتجر",
+    "welcome": "مرحبا بكم في متجرنا! اكتشف خططنا المميزة وحوّل جواهرك.",
+    "gemIconAlt": "رمز الجوهرة",
+    "planOneMonth": {
+      "title": "الخطة المميزة - 1 شهر",
+      "description": "الوصول الكامل لمدة شهر واحد",
+      "price": "500 دينار"
+    },
+    "planThreeMonths": {
+      "title": "الخطة المميزة - 3 أشهر",
+      "description": "الوصول الكامل لمدة 3 أشهر",
+      "price": "1200 دينار"
+    },
+    "planSixMonths": {
+      "title": "الخطة المميزة - 6 أشهر",
+      "description": "الوصول الكامل لمدة 6 أشهر",
+      "price": "2200 دينار"
+    },
+    "convertGems": {
+      "title": "تحويل الجواهر",
+      "description": "حوّل جواهرك إلى خطط مميزة!",
+      "oneMonth": {
+        "title": "الخطة المميزة - 1 شهر",
+        "gems": "10 جواهر"
+      },
+      "threeMonths": {
+        "title": "الخطة المميزة - 3 أشهر",
+        "gems": "25 جوهرة"
+      },
+      "sixMonths": {
+        "title": "الخطة المميزة - 6 أشهر",
+        "gems": "40 جوهرة"
+      }
+    },
+    "buy": "اشترِ",
+    "convert": "حوّل"
+  },
+  "settings": {
+    "title": "الإعدادات",
+    "personalInfo": "معلومات شخصية",
+    "profilePicture": "صورة الملف الشخصي",
+    "username": "اسم المستخدم",
+    "usernamePlaceholder": "أدخل اسم المستخدم",
+    "bio": "السيرة الذاتية",
+    "bioPlaceholder": "أدخل سيرتك الذاتية",
+    "email": "البريد الإلكتروني",
+    "emailPlaceholder": "أدخل بريدك الإلكتروني",
+    "changePassword": "تغيير كلمة المرور",
+    "currentPassword": "كلمة المرور الحالية",
+    "newPassword": "كلمة مرور جديدة",
+    "changeLanguage": "تغيير اللغة",
+    "profileVisibility": "رؤية الملف الشخصي",
+    "public": "عام",
+    "private": "خاص",
+    "educationalCurriculum": "المنهج الدراسي",
+    "level": "المستوى",
+    "saveChanges": "حفظ التغييرات",
+    "saving": "جاري الحفظ...",
+    "changeProfilePicture": "تغيير صورة الملف الشخصي",
+    "save": "حفظ",
+    "cancel": "إلغاء"
+  },
+  "classes": {
+    "title": "الحزم التي تم إنشاؤها مؤخرًا"
+  },
+  "packet": {
+    "loading": "جاري التحميل...",
+    "Flashcards": "بطاقات تعليمية",
+    "Quiz": "اختبار",
+    "MatchingGame": "لعبة المطابقة",
+    "Test": "اختبار",
+    "createdBy": "تم الإنشاء بواسطة",
+    "share": "مشاركة",
+    "questions": "أسئلة الحزمة",
+    "noData": "لا توجد بيانات متاحة"
+  },
+  "matchinggame": {
+    "game_title": "هل أنت مستعد للعب؟",
+    "game_instructions": "طابق جميع المصطلحات مع تعريفاتها في أسرع وقت ممكن",
+    "start_game": "ابدأ اللعبة",
+    "rounds_label": "الجولات:",
+    "timer_label": "مدة المؤقت (بالدقائق):",
+    "results_congratulations": "تهانينا! لقد أكملت اللعبة.",
+    "results_title": "انتهت اللعبة!",
+    "results_replay": "إعادة اللعب"
+  },
+  "ad": {
+    "message": "أنشئ حسابًا مجانيًا بنسبة 100% كأحد المشتركين الأوائل لدينا! العرض صالح لمدة شهر واحد فقط!"
+  }
+}

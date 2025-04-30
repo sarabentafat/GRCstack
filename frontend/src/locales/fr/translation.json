@@ -1,0 +1,209 @@
+{
+  "home": {
+    "home": "Accueil",
+    "about": "À propos",
+    "services": "Services",
+    "contact": "Contact",
+    "login": "Se connecter",
+    "welcome": "Avec Brainy Apprenez, testez et progressez intelligemment",
+    "learning_description": "Notre plateforme offre une manière unique de tester vos connaissances, renforcer votre apprentissage et défier vos amis—tout en vous amusant.",
+    "platform_description": "",
+    "signup": "S'inscrire",
+    "image_placeholder": "Ajoutez votre image ici"
+  },
+  "about": {
+    "section1": {
+      "title": "Utilisez nos cartes mémoire et la méthode de répétition espacée pour renforcer votre mémoire à long terme pour une meilleure rétention.",
+      "smallText": "Optimisation de la mémorisation",
+      "details": "Des rappels intelligents vous guideront dans vos révisions, vous aidant à ancrer durablement les connaissances."
+    },
+    "section2": {
+      "title": "Suivez vos performances en temps réel avec des graphiques clairs et détaillés. Visualisez votre progression et analysez vos résultats pour ajuster votre stratégie d'apprentissage.",
+      "smallText": "Suivi de votre évolution",
+      "details": "Des rapports détaillés vous aident à identifier vos points forts et à concentrer vos efforts là où c'est nécessaire."
+    },
+    "section3": {
+      "title": "Participez à des quiz interactifs adaptés à votre niveau. Recevez des feedbacks instantanés pour corriger vos erreurs et améliorer vos compétences.",
+      "smallText": "Testez vos connaissances",
+      "details": "Les quiz sont régulièrement mis à jour pour refléter les dernières tendances et les avancées dans chaque domaine d'étude."
+    },
+    "section4": {
+      "title": "Accédez à des quiz basés sur des cours régulièrement mis à jour par notre équipe d'experts, vous garantissant ainsi des contenus toujours actuels et pertinents.",
+      "smallText": "Cours mis à jour régulièrement",
+      "details": "Les quiz sont régulièrement mis à jour pour refléter les dernières tendances et les avancées dans chaque domaine d'étude."
+    }
+  },
+  "footer": {
+    "aboutUs": "À propos de nous",
+    "aboutBrainy": "À propos de Brainy",
+    "howItWorks": "Comment fonctionne Brainy ?",
+    "advertise": "Faire de la publicité avec nous",
+    "getApp": "Obtenir l'application",
+    "resources": "Ressources",
+    "helpCenter": "Centre d'aide",
+    "privacyPolicy": "Politique de confidentialité",
+    "termsOfService": "Conditions d'utilisation",
+    "contact": "Contact",
+    "followUs": "Suivez-nous",
+    "copyright": "© {{year}} Brainy. Tous droits réservés."
+  },
+  "motiv": {
+    "get_better_grades": "Obtenez de meilleures notes avec la plateforme d'apprentissage n°1 en Algérie",
+    "discover_enhanced_learning": "Découvrez un apprentissage plus approfondi avec Brainy Plus",
+    "train_and_track": "Entraînez-vous et suivez vos progrès",
+    "optimize_studies": "Optimisez vos études avec nos nouvelles fonctionnalités d'IA de pointe",
+    "millions_of_courses": "Des millions de cours de confiance",
+    "combined_power": "Comprenez les devoirs difficiles grâce à la puissance combinée de l'IA et des solutions rédigées par des experts",
+    "advanced_tools": "Optimisez vos études",
+    "level_up": "Passez au niveau supérieur avec Brainy Plus",
+    "modern_interface": "Profitez d'une interface moderne et d'outils d'apprentissage intelligents pour améliorer vos résultats académiques."
+  },
+  "login": {
+    "welcome": "Bienvenue",
+    "email_label": "Email",
+    "email_placeholder": "Entrer votre email",
+    "password_label": "Mot de passe",
+    "password_placeholder": "Entrer votre mot de passe",
+    "submit_button": "Connexion",
+    "no_account": "Vous n'avez pas de compte ?",
+    "create_account": "Créez-en un ici",
+    "error_message": "Une erreur s'est produite lors de la connexion."
+  },
+  "signup": {
+    "title": "Inscription",
+    "username": "Nom d'utilisateur",
+    "usernamePlaceholder": "Entrez votre nom d'utilisateur",
+    "email": "Email",
+    "emailPlaceholder": "Entrez votre email",
+    "phoneNumber": "Numéro de téléphone",
+    "phoneNumberPlaceholder": "Entrez votre numéro de téléphone",
+    "gender": "Genre",
+    "genderPlaceholder": "Sélectionnez votre genre",
+    "genderMale": "Homme",
+    "genderFemale": "Femme",
+    "address": "Adresse",
+    "addressPlaceholder": "Entrez votre adresse",
+    "password": "Mot de passe",
+    "passwordPlaceholder": "Entrez votre mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "confirmPasswordPlaceholder": "Confirmez votre mot de passe",
+    "checkAvailability": "Vérifier la disponibilité",
+    "next": "Suivant"
+  },
+  "errors": {
+    "usernameRequired": "Le nom d'utilisateur est requis",
+    "firstnameRequired": "Le prénom est requis",
+    "secondnameRequired": "Le nom de famille est requis",
+    "emailRequired": "L'email est requis",
+    "emailInvalid": "Adresse email invalide",
+    "phonenumberRequired": "Le numéro de téléphone est requis",
+    "genderRequired": "Le genre est requis",
+    "addressRequired": "L'adresse est requise",
+    "passwordRequired": "Le mot de passe est requis",
+    "passwordLength": "Le mot de passe doit comporter au moins 6 caractères",
+    "passwordMismatch": "Les mots de passe ne correspondent pas",
+    "emailExists": "L'email est déjà utilisé",
+    "usernameExists": "Le nom d'utilisateur est déjà utilisé",
+    "verificationError": "Une erreur est survenue lors de la vérification",
+    "registrationFailed": "L'inscription a échoué"
+  },
+  "leftside": {
+    "brandName": "Brainy",
+    "home": "Accueil",
+    "explore": "Explorer",
+    "modules": "Mes modules",
+    "favorites": "Mes favoris",
+    "settings": "Paramètres",
+    "shop": "Shop"
+  },
+  "store": {
+    "title": "Boutique",
+    "welcome": "Bienvenue dans notre boutique ! Découvrez nos plans premium et convertissez vos gemmes.",
+    "gemIconAlt": "Icône de gemme",
+    "planOneMonth": {
+      "title": "Plan Premium - 1 mois",
+      "description": "Accès complet pendant 1 mois",
+      "price": "500 DA"
+    },
+    "planThreeMonths": {
+      "title": "Plan Premium - 3 mois",
+      "description": "Accès complet pendant 3 mois",
+      "price": "1200 DA"
+    },
+    "planSixMonths": {
+      "title": "Plan Premium - 6 mois",
+      "description": "Accès complet pendant 6 mois",
+      "price": "2200 DA"
+    },
+    "convertGems": {
+      "title": "Convertir les Gemmes",
+      "description": "Convertissez vos gemmes en plans premium !",
+      "oneMonth": {
+        "title": "Plan Premium - 1 mois",
+        "gems": "10 Gemmes"
+      },
+      "threeMonths": {
+        "title": "Plan Premium - 3 mois",
+        "gems": "25 Gemmes"
+      },
+      "sixMonths": {
+        "title": "Plan Premium - 6 mois",
+        "gems": "40 Gemmes"
+      }
+    },
+    "buy": "Acheter",
+    "convert": "Convertir"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "personalInfo": "Informations personnelles",
+    "profilePicture": "Photo de profil",
+    "username": "Nom d'utilisateur",
+    "usernamePlaceholder": "Entrez votre nom d'utilisateur",
+    "bio": "Biographie",
+    "bioPlaceholder": "Entrez votre biographie",
+    "email": "E-mail",
+    "emailPlaceholder": "Entrez votre e-mail",
+    "changePassword": "Changer le mot de passe",
+    "currentPassword": "Mot de passe actuel",
+    "newPassword": "Nouveau mot de passe",
+    "changeLanguage": "Changer la langue",
+    "profileVisibility": "Visibilité du profil",
+    "public": "Public",
+    "private": "Privé",
+    "educationalCurriculum": "Curriculum éducatif",
+    "level": "Niveau",
+    "saveChanges": "Enregistrer les modifications",
+    "saving": "Enregistrement...",
+    "changeProfilePicture": "Changer la photo de profil",
+    "save": "Enregistrer",
+    "cancel": "Annuler"
+  },
+  "classes": {
+    "title": "Les packets créés récemment"
+  },
+  "packet": {
+    "loading": "Chargement...",
+    "Flashcards": "Cartes",
+    "Quiz": "Quiz",
+    "MatchingGame": "Jeu ",
+    "Test": "Test",
+    "createdBy": "Créé par",
+    "share": "Partager",
+    "questions": "Les questions du packet",
+    "noData": "Aucune donnée disponible"
+  },
+  "matchinggame": {
+    "game_title": "Prêt à jouer ?",
+    "game_instructions": "Associez tous les termes à leurs définitions aussi vite que possible",
+    "start_game": "Commencer",
+    "rounds_label": "Nombre de rounds :",
+    "timer_label": "Durée du timer (en minutes) :",
+    "results_congratulations": "Félicitations ! Vous avez terminé le jeu.",
+    "results_title": "Jeu terminé !",
+    "results_replay": "Rejouer"
+  },
+  "ad": {
+    "message": "Créez un compte 100% gratuit en étant parmi nos premiers abonnés ! Offre valable pendant 1 mois seulement !"
+  }
+}
