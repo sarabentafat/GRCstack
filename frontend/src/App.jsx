@@ -27,6 +27,13 @@ import PrivateRoute from "./components/PrivateRoute";
 import Video from "./pages/Video";
 import Folder from "./pages/Folder";
 import Book from "./pages/Book";
+import Frameworks from "./screens/Frameworks";
+import Threats from "./screens/Threats";
+import Evidences from "./screens/Evidences";
+import Project from "./screens/Project";
+import Audit from "./screens/Audit";
+import Framework from "./screens/Framework";
+import Mapping from "./screens/Mapping";
 
 const router = createBrowserRouter([
   {
@@ -53,6 +60,34 @@ const router = createBrowserRouter([
       {
         path: "admin",
         element: <Admin />,
+      },
+      {
+        path: "frameworks",
+        element: <Frameworks />,
+      },
+      {
+        path: "mapping",
+        element: <Mapping />,
+      },
+      {
+        path: "frameworks/:id",
+        element: <Framework />,
+      },
+      {
+        path: "project/:id",
+        element: <Project />,
+      },
+      {
+        path: "project/:id/audit/:auditId",
+        element: <Audit />,
+      },
+      {
+        path: "threats",
+        element: <Threats />,
+      },
+      {
+        path: "evidences",
+        element: <Evidences />,
       },
 
       {
@@ -121,7 +156,7 @@ const router = createBrowserRouter([
 
       {
         path: "book/:id",
-        element: <Book/>,
+        element: <Book />,
       },
 
       {

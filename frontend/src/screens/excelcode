@@ -1,0 +1,169 @@
+import React, { useState } from "react";
+import * as XLSX from "xlsx";
+import { ChevronRight } from "lucide-react"; // You can also use Heroicons if preferred
+
+const Framework = () => {
+  const [data, setData] = useState([]);
+  const [file, setFile] = useState(null);
+  const [openLevel1, setOpenLevel1] = useState(null);
+  const [openLevel2, setOpenLevel2] = useState(null);
+
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+      parseExcelFile(selectedFile);
+    }
+  };
+
+  const parseExcelFile = (file) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const data = e.target.result;
+      const workbook = XLSX.read(data, { type: "binary" });
+      const sheet = workbook.Sheets[workbook.SheetNames[0]];
+      const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+      const transformedData = transformData(jsonData);
+      setData(transformedData);
+    };
+    reader.readAsBinaryString(file);
+  };
+
+  const transformData = (jsonData) => {
+    const groupedData = [];
+    let currentLevel1 = null;
+    let currentLevel2 = null;
+
+    jsonData.forEach((row) => {
+      const [level, level_name, identifier, title, content, is_ratable] = row;
+
+      if (level === 1) {
+        if (currentLevel1) {
+          groupedData.push(currentLevel1);
+        }
+        currentLevel1 = {
+          level: 1,
+          level_name,
+          identifier: "",
+          title,
+          content: "",
+          is_ratable,
+          level2: [],
+        };
+        currentLevel2 = null;
+      }
+
+      if (level === 2) {
+        if (currentLevel1) {
+          currentLevel2 = {
+            level: 2,
+            level_name,
+            identifier,
+            title,
+            content: "",
+            is_ratable,
+            level3: [],
+          };
+          currentLevel1.level2.push(currentLevel2);
+        }
+      }
+
+      if (level === 3 && currentLevel2) {
+        currentLevel2.level3.push({
+          level: 3,
+          level_name,
+          identifier,
+          title,
+          content,
+          is_ratable,
+        });
+      }
+    });
+
+    if (currentLevel1) {
+      groupedData.push(currentLevel1);
+    }
+
+    return groupedData;
+  };
+
+  const toggleLevel1 = (index) => {
+    setOpenLevel1(openLevel1 === index ? null : index);
+    setOpenLevel2(null); // Reset level 2 on toggle
+  };
+
+  const toggleLevel2 = (index) => {
+    setOpenLevel2(openLevel2 === index ? null : index);
+  };
+
+  return (
+    <div className="p-6 bg-white min-h-screen space-y-6">
+      <input
+        type="file"
+        accept=".xlsx, .xls"
+        onChange={handleFileChange}
+        className="block p-2 border border-gray-300 rounded w-full max-w-md bg-gray-50"
+      />
+      <div className="space-y-4">
+        {data.map((level1Data, level1Index) => (
+          <div
+            key={level1Index}
+            className="bg-white border rounded-lg shadow p-4"
+          >
+            <div
+              className="cursor-pointer flex items-center justify-between text-xl font-semibold text-gray-800"
+              onClick={() => toggleLevel1(level1Index)}
+            >
+              <span>{level1Data.title}</span>
+              <ChevronRight
+                className={`w-5 h-5 transition-transform ${
+                  openLevel1 === level1Index ? "rotate-90" : ""
+                }`}
+              />
+            </div>
+            {openLevel1 === level1Index && (
+              <div className="mt-3 ml-4 space-y-2">
+                {level1Data.level2.map((level2Data, level2Index) => (
+                  <div key={level2Index} className="pl-2">
+                    <div
+                      className="cursor-pointer flex items-center justify-between text-lg font-medium text-gray-700"
+                      onClick={() => toggleLevel2(level2Index)}
+                    >
+                      <span>{level2Data.title}</span>
+                      <ChevronRight
+                        className={`w-4 h-4 transition-transform ${
+                          openLevel2 === level2Index ? "rotate-90" : ""
+                        }`}
+                      />
+                    </div>
+                    {openLevel2 === level2Index && (
+                      <div className="ml-6 mt-2 space-y-2 border-l border-gray-200 pl-4">
+                        {level2Data.level3.map((level3Data, level3Index) => (
+                          <div key={level3Index} className="text-sm">
+                            <h5 className="font-semibold text-gray-800">
+                              {level3Data.title}
+                            </h5>
+                            <p className="text-gray-600">
+                              {level3Data.content}
+                            </p>
+                            {/* <p className="text-gray-500">
+                              <strong>Is Ratable:</strong>{" "}
+                              {level3Data.is_ratable}
+                            </p> */}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default Framework;

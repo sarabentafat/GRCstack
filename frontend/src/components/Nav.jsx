@@ -48,22 +48,10 @@ const Nav = () => {
           placeholder="search"
         /> */}
       </div>
-
       <div onClick={toggleTheme}>
         <BiSolidSun size={27} className="cursor-pointer" />
       </div>
-      <div className="w-7 flex justify-center items-center">
-        <img src={flame} alt="flame" />
-        <p className="text-[#F4702E] font-bold">{streak}</p>
-      </div>
-      <div className="flex gap-1 items-center">
-        <img className="w-7" src={score} alt="score" />
-        <div>
-          <p className="text-blue-600">
-            {profile?.statistics?.totalScore || 0}
-          </p>
-        </div>
-      </div>
+
       <Link to={"notifications"} className="relative">
         <IoNotificationsOutline size={27} className="text-blue-500" />
         <div className="absolute top-1 right-1 bg-red-500 w-2 h-2 rounded"></div>
