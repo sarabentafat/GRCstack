@@ -39,7 +39,7 @@ app.use("/api/folders", require("./routes/foldersRoute"));
 app.use("/api/packets", require("./routes/packetsRoute"));
 app.use("/api/projects", require("./routes/projectsRoute"));
 app.use("/api/audits", require("./routes/auditsRoute"));
-// app.use("/api/frameworks", require("./routes/frameworksRoute"));
+app.use("/api/frameworks", require("./routes/frameworksRoute"));
 app.use("/api/auth", require("./routes/authRoute"));
 app.use("/api/users", require("./routes/usersRoute"));
 app.use("/api/categories", require("./routes/categoriesRoute"));

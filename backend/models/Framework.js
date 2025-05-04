@@ -1,36 +1,76 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
-const FrameworkSchema = new mongoose.Schema(
+// Define the schema for the levels (recursive structure)
+const levelSchema = new mongoose.Schema(
   {
-    name: { type: String, required: true },
-    version: { type: String, required: true },
-    description: { type: String, required: true },
-    levels: [
-      {
-        level: { type: Number, required: true },
-        level_name: { type: String, required: true },
-        identifier: { type: String, required: true },
-        title: { type: String, required: true },
-        content: { type: String, required: true },
-        is_ratable: { type: Boolean, default: false },
-        status: {
-          type: String,
-          enum: ["Not Started", "In Progress", "Compliant", "Non-Compliant"],
-          default: "Not Started",
-        },
-        evidence: [
-          {
-            name: { type: String },
-            fileUrl: { type: String },
-            uploadedAt: { type: Date, default: Date.now },
-          },
-        ],
-        children: [{ type: mongoose.Schema.Types.ObjectId, ref: "Level" }],
-      },
-    ],
+    level: {
+      type: Number,
+      required: true,
+    },
+    level_name: {
+      type: String,
+      default: "",
+    },
+    identifier: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    title: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+    content: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    is_ratable: {
+      type: Boolean,
+      default: false,
+    },
+    status: {
+      type: String,
+      default: "Not Started",
+    },
+    evidence: {
+      type: [String],
+      default: [],
+    },
+    children: {
+      type: [this], // Self-referencing for recursive structure
+      default: [],
+    },
   },
-  { timestamps: true }
+  { _id: false } // No need for _id in subdocuments
 );
 
-const Framework = mongoose.model("Framework", FrameworkSchema);
-export default Framework;
+// Define the main Framework schema
+const frameworkSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+      default: "Untitled Framework",
+    },
+    description: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+    owner: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User", // Assumes a User model exists
+ 
+    },
+    levels: {
+      type: [levelSchema],
+      default: [],
+    },
+  },
+  { timestamps: true } // Adds createdAt and updatedAt fields
+);
+
+module.exports = mongoose.model("Framework", frameworkSchema);
