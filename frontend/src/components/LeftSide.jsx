@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { HiOutlineFolderOpen } from "react-icons/hi2";
 import { GiImperialCrown } from "react-icons/gi";
 import { MdOutlineReportProblem } from "react-icons/md";
@@ -17,7 +17,16 @@ import LogoutButton from "./LogoutButton";
 import logo from "../assets/images/brainy.svg";
 import { useTranslation } from "react-i18next";
 
+import { useDispatch, useSelector } from "react-redux";
+import { getProjects } from "../redux/apiCalls/projectApiCall";
+
 const LeftSide = () => {
+  const dispatch=useDispatch();
+  useEffect(() => {
+    dispatch(getProjects());
+  },[dispatch]);
+  const projects= useSelector((state) => state.project.projects);
+  console.log(projects);
   const { t } = useTranslation();
   const location = useLocation();
   const [activeLink, setActiveLink] = useState("/accueil");
@@ -60,7 +69,7 @@ const LeftSide = () => {
         } lg:translate-x-0 lg:w-[20%] z-30`}
       >
         <div className="flex text-2xl justify-center gap-1 items-center mb-14 text-blue-500">
-          <img src={logo} alt="logo" className="w-8" />
+         
           Grcstack
         </div>
 
@@ -77,19 +86,24 @@ const LeftSide = () => {
             {openDropdown === "projects" ? <IoChevronUp /> : <IoChevronDown />}
           </button>
           {openDropdown === "projects" && (
-            <div className="ml-12 flex flex-col text-sm text-gray-600 dark:text-white gap-2">
-              <Link
-                to="/user/project/1"
-                onClick={() => handleLinkClick("/user/project1")}
-              >
-                Project 1
-              </Link>
-              <Link
-                to="/user/project2"
-                onClick={() => handleLinkClick("/user/project2")}
-              >
-                Project 2
-              </Link>
+            <div>
+              {projects.length > 0 ? (
+                projects.map((project) => (
+                  <Link
+                    key={project._id}
+                    to={`/user/project/${project._id}`}
+                    className={`ml-12 flex text-sm text-gray-600 dark:text-white gap-2 ${
+                      location.pathname === `/user/projects/${project._id}`
+                        ? "text-blue-500 font-bold"
+                        : ""
+                    }`}
+                  >
+                    {project.name}
+                  </Link>
+                ))
+              ) : (
+                <div>No projects available</div>
+              )}
             </div>
           )}
         </div>

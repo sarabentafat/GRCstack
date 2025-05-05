@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { Link, useParams } from "react-router-dom";
+import { getProjectById } from "../redux/apiCalls/projectApiCall";
+import { useDispatch, useSelector } from "react-redux";
 
 // Sample frameworks (these can be fetched from the backend or stored in your app state)
 const frameworks = [
@@ -20,7 +22,8 @@ const Progress = ({ value }) => (
 );
 
 const Project = () => {
-  const { id: projectId } = useParams(); // Use `useParams()` to get the project ID
+  const dispatch = useDispatch();
+  const { id } = useParams(); // Use `useParams()` to get the project ID
   const [project, setProject] = useState({
     name: "Banking Compliance Project",
     audits: [
@@ -45,7 +48,13 @@ const Project = () => {
       { id: 4, name: "GDPR Audit", status: "Completed", framework: "GDPR" },
     ],
   });
-
+  console.log(id);
+useEffect(() => {
+  dispatch(getProjectById(id));
+}, [dispatch, id]);
+const projectData = useSelector((state) => state.project.project);
+console.log(projectData);
+ const projet= useSelector((state) => state.project.project);
   const [showModal, setShowModal] = useState(false);
   const [newAudit, setNewAudit] = useState({
     name: "",
@@ -98,17 +107,17 @@ const Project = () => {
       </div>
 
       <div className="space-y-4">
-        {project.audits.map((audit) => (
+        {projectData?.audits?.map((audit) => (
           <Link
-            to={`/user/project/${projectId}/audit/${audit.id}`}
+            to={`/user/project/${id}/audit/${audit._id}`}
             key={audit.id}
             className="p-4 bg-white border border-gray-200 rounded-xl shadow-sm flex justify-between items-center"
           >
             <div>
               <h2 className="text-lg font-semibold">{audit.name}</h2>
-              <p className="text-sm text-gray-500">Status: {audit.status}</p>
+              {/* <p className="text-sm text-gray-500">Status: {audit.status}</p> */}
               <p className="text-sm text-gray-500">
-                Framework: {audit.framework}
+                Framework: {audit.frameworkId.name}
               </p>
             </div>
             <div
@@ -120,7 +129,7 @@ const Project = () => {
                   : "bg-gray-100 text-gray-600"
               }`}
             >
-              {audit.status}
+              {/* {audit.status} */}
             </div>
           </Link>
         ))}

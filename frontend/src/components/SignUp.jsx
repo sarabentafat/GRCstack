@@ -9,7 +9,7 @@ import networkIcon from "../assets/icons/more.png";
 import jobIcon from "../assets/icons/more.png";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchLevelById, fetchLevels } from "../redux/apiCalls/levelApiCall";
-import { fetchFieldById, fetchFields } from "../redux/apiCalls/fieldApiCall";
+// import { fetchFieldById, fetchFields } from "../redux/apiCalls/fieldApiCall";
 import { fetchSubfieldById } from "../redux/apiCalls/subfieldApiCall";
 import { checkEmailUsername, registerUser } from "../redux/apiCalls/authApiCall";
 import { useTranslation } from "react-i18next";
@@ -21,7 +21,7 @@ const dispatch = useDispatch();
 const navigate = useNavigate();
 const [loading,setLoading]=useState(null)
 const [step, setStep] = useState(1);
-const [selectedYear, setSelectedYear] = useState(""); // Initialize selectedYear state
+// const [selectedYear, setSelectedYear] = useState(""); // Initialize selectedYear state
 const [selectedSubfield, setSelectedSubfield] = useState("");
 const [selectedLevel, setSelectedLevel] = useState(null);
 const [selectedField, setSelectedField] = useState("");
@@ -137,7 +137,7 @@ const [formData, setFormData] = useState({
         level: "",
         field: "", // Example ObjectId for field
         subfield: "",
-        year: "",
+        // year: "",
         referralsource: "",
         // Example ObjectId for subfield
       });
@@ -153,7 +153,7 @@ const [formErrors, setFormErrors] = useState({
         level: "",
         field: "", // Example ObjectId for field
         subfield: "",
-        year: "",
+        // year: "",
         referralsource: "",
         // Example ObjectId for subfield
       });
@@ -267,12 +267,6 @@ const handleSubfieldSelect = (f) => {
 
         setFormData({ ...formData, subfield: f }); // Update formData with selected field
       };
-
-const handleYearSelect = (y) => {
-        setSelectedYear(y); // Update selectedYear when a year is selected
-        setFormData({ ...formData, year: y });
-      };
-
 
       return (
         <div className="min-w-full  h-screen">
@@ -695,42 +689,8 @@ const handleYearSelect = (y) => {
                 <label className="block w-fit text-xl mb-2 shadow bg-blue-500 text-white p-4 rounded-r-2xl rounded-bl-2xl">
                   A quelle année vous êtes ?
                 </label>
-                <div className="grid grid-cols-2 gap-4">
-                  {subfield?.years?.map((year) => {
-                    const isSelected = selectedYear === year._id;
 
-                    return (
-                      <div
-                        key={year._id}
-                        className={`p-4 rounded-lg cursor-pointer flex items-center gap-4 ${
-                          isSelected
-                            ? "bg-blue-50 border border-blue-500"
-                            : "bg-blue-50 shadow"
-                        }`}
-                        onClick={() => handleYearSelect(year._id)} // Ensure this handler updates the selected year
-                      >
-                        <p>{year.name}</p>
-                      </div>
-                    );
-                  })}
-                </div>
-                <div className="flex justify-between mt-6">
-                  <button
-                    type="button"
-                    onClick={prevStep}
-                    className="text-gray-500 p-2 rounded mr-2"
-                  >
-                    Précédent
-                  </button>
-                  {selectedYear && (
-                    <button
-                      type="submit"
-                      className="bg-blue-500 text-white p-2 rounded-lg px-16 py-4"
-                    >
-                      Soumettre
-                    </button>
-                  )}
-                </div>
+
               </form>
             )}
           </div>

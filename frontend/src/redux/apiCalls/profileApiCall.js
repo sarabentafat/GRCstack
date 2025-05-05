@@ -103,18 +103,6 @@ export function uploadProfilePhoto(id, newPhoto) {
       // toast.success(data.message);
       console.log(data.message);
     } catch (error) {
-      // Handle different error scenarios
-      // if (error.response) {
-      //   // toast.error(error.response.data.message);
-      //   console.log(error.response.data.message);
-      // } else if (error.request) {
-      //   // The request was made but no response was received
-      //   toast.error("No response received from the server.");
-      // } else {
-      //   // Something happened in setting up the request that triggered an error
-      //   toast.error("An unexpected error occurred.");
-      // }
-
       // Log the error for further debugging if needed
       console.error("Error in uploadProfilePhoto:", error);
     }
