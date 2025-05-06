@@ -1,6 +1,9 @@
 const XLSX = require("xlsx");
 const Framework = require("../models/Framework");
 
+const axios = require("axios");
+const FormData = require("form-data"); // ✅ use npm form-data package
+
 const parseExcelRowsToTree = (rows) => {
   const tree = [];
   const parents = {};
@@ -154,8 +157,12 @@ const uploadFramework = async (req, res) => {
     const framework = new Framework({
       name: req.body.name?.trim() || "Untitled Framework",
       description: req.body.description?.trim() || "",
-      owner: req.userId,
+      user: req.user._id,
       levels: levelsTree,
+      version: req.body.version?.trim() || "1.0",
+      provider: req.body.provider?.trim() || "Unknown",
+      language: req.body.language?.trim() || "en",
+
     });
 
     await framework.save();
@@ -172,9 +179,9 @@ const uploadFramework = async (req, res) => {
 
 const getFrameworks = async (req, res) => {
   try {
-    if (!req.userId) {
-      return res.status(401).json({ message: "User not authenticated." });
-    }
+    // if (!req.userId) {
+    //   return res.status(401).json({ message: "User not authenticated." });
+    // }
 
     const frameworks = await Framework.find({ owner: req.userId });
     res.status(200).json(frameworks);
@@ -186,7 +193,84 @@ const getFrameworks = async (req, res) => {
   }
 };
 
+const mappedFramework = async (req, res) => {
+  try {
+    const { name, description, provider, version, language } = req.body;
+
+    const file1 = req.files?.file1?.[0];
+    const file2 = req.files?.file2?.[0];
+
+    if (!file1 || !file2) {
+      return res.status(400).json({ message: "Two Excel files are required." });
+    }
+
+    // ✅ Use the correct field names: file_a and file_b
+    const form = new FormData();
+    form.append("file_a", file1.buffer, {
+      filename: file1.originalname,
+      contentType: file1.mimetype,
+    });
+    form.append("file_b", file2.buffer, {
+      filename: file2.originalname,
+      contentType: file2.mimetype,
+    });
+
+    const response = await axios.post("http://127.0.0.1:8000/map", form, {
+      headers: form.getHeaders(),
+      responseType: "arraybuffer",
+    });
+
+    const workbook = XLSX.read(response.data, { type: "buffer" });
+    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+    const rows = XLSX.utils.sheet_to_json(sheet, {
+      header: 1,
+      blankrows: false,
+    });
+
+    if (rows.length <= 1) {
+      return res
+        .status(400)
+        .json({ message: "Mapped file is empty or only contains headers." });
+    }
+
+    const levelsTree = parseExcelRowsToTree(rows);
+
+    if (!levelsTree || levelsTree.length === 0) {
+      return res.status(400).json({ message: "Parsed data is empty." });
+    }
+
+    const framework = new Framework({
+      name: name?.trim() || "Mapped Framework",
+      description: description?.trim() || "",
+      user: req.user._id,
+      levels: levelsTree,
+      version: version?.trim() || "1.0",
+      provider: provider?.trim() || "Mapping Engine",
+      language: language?.trim() || "en",
+    });
+
+    console.log("file1 name:", file1.originalname);
+    console.log("file2 name:", file2.originalname);
+    console.log("file1 type:", file1.mimetype);
+    console.log("form headers:", form.getHeaders());
+
+    await framework.save();
+
+    res.status(201).json({
+      message: "Mapped framework created successfully",
+      framework,
+    });
+  } catch (error) {
+    console.error("Mapped Framework Error:", error);
+    res.status(500).json({
+      message: "Failed to map and save framework",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   uploadFramework,
   getFrameworks,
+  mappedFramework,
 };

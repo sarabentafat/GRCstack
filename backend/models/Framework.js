@@ -49,6 +49,11 @@ const levelSchema = new mongoose.Schema(
 // Define the main Framework schema
 const frameworkSchema = new mongoose.Schema(
   {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User", // Assumes a User model exists
+      required: true,
+    },
     name: {
       type: String,
       required: true,
@@ -60,11 +65,22 @@ const frameworkSchema = new mongoose.Schema(
       default: "",
       trim: true,
     },
-    owner: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User", // Assumes a User model exists
- 
+    version: {
+      type: String,
+      default: "1.0",
     },
+    provider: {
+      type: String,
+      default: "Unknown",
+    },
+    language: {
+      type: String,
+      default: "English",
+    },
+
+
+
+
     levels: {
       type: [levelSchema],
       default: [],

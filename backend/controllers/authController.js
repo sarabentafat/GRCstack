@@ -9,10 +9,6 @@ const VerificationToken = require("../models/VerificationToken");
 const crypto = require("crypto");
 const sendEmail = require("../utils/sendEmail");
 const jwt = require("jsonwebtoken");
-const Level = require("../models/Level");
-const Field = require("../models/Field");
-const Subfield = require("../models/Subfield");
-const Year = require("../models/Year"); // Import Year model if you are using it
 const Token = require("../models/token");
 const Joi = require("joi");
 

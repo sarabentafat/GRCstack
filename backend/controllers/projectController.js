@@ -16,18 +16,71 @@ const createProject = asyncHandler(async (req, res) => {
       .json({ message: "Project name and owner are required." });
   }
 
-  const newProject = new Project({
-    name,
-    description,
-    owner,
-  });
+  try {
+    const newProject = new Project({
+      name,
+      description,
+      owner,
+    });
 
-  const savedProject = await newProject.save();
+    const savedProject = await newProject.save();
 
-  res.status(201).json({
-    message: "Project created successfully",
-    project: savedProject,
+    res.status(201).json({
+      message: "Project created successfully",
+      project: savedProject,
+    });
+  } catch (error) {
+    res.status(400).json({
+      message: "Invalid project data",
+      error: error.message,
+    });
+  }
+});
+
+/**----------------------------------------------
+ * @desc    Get all projects
+ * @route   GET /api/projects
+ * @method  GET
+ * @access  Private
+ * ----------------------------------------------*/
+const getProjects = asyncHandler(async (req, res) => {
+  const projects = await Project.find().populate("audits");
+
+  if (!projects || projects.length === 0) {
+    return res.status(404).json({ message: "No projects found" });
+  }
+
+  res.status(200).json({
+    message: "Projects retrieved successfully",
+    projects,
   });
 });
 
-module.exports = { createProject };
+/**----------------------------------------------
+ * @desc    Get project by ID
+ * @route   GET /api/projects/:id
+ * @method  GET
+ * @access  Private
+ * ----------------------------------------------*/
+const getProjectById = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  // Find project and populate audits with their frameworkId
+  const project = await Project.findById(id).populate({
+    path: "audits",
+    populate: {
+      path: "frameworkId",
+      model: "Framework",
+    },
+  });
+
+  if (!project) {
+    return res.status(404).json({ message: "Project not found" });
+  }
+
+  res.status(200).json({
+    message: "Project retrieved successfully",
+    project,
+  });
+});
+
+module.exports = { createProject,getProjects,getProjectById };
