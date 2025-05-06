@@ -4,6 +4,7 @@ const {
   uploadFramework,
   getFrameworks,
   mappedFramework,
+  getFrameworkById,
 } = require("../controllers/frameworksController");
 const { verifyTokenAndAuthorization, verifyToken } = require("../middlewares/verifyToken");
 
@@ -12,6 +13,7 @@ const upload = multer();
 
 router.post("/upload", verifyToken, upload.single("file"), uploadFramework);
 router.get("/", verifyToken,getFrameworks);
+router.get("/:id", verifyToken, getFrameworkById);
 router.post(
   "/map",
   verifyToken,

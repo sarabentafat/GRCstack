@@ -11,7 +11,7 @@ const mongoose = require("mongoose");
  * ----------------------------------------------*/
 const createAudit = asyncHandler(async (req, res) => {
     const { projectId } = req.params;
-  const { frameworkId, findings } = req.body;
+  const { frameworkId, findings,scope,objectives,description } = req.body;
 
   if (!projectId || !frameworkId) {
     return res
@@ -35,6 +35,9 @@ const createAudit = asyncHandler(async (req, res) => {
     name: req.body.name?.trim() || "Untitled Audit",
     projectId,
     frameworkId,
+    scope: scope || "Default Scope",
+    description: description || "Default Description",
+    objectives: objectives || "Default Objectives",
     findings: findings || [], // Optional at creation
   });
 

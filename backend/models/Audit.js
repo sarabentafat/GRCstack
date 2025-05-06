@@ -2,6 +2,9 @@ const mongoose = require("mongoose");
 
 const AuditSchema = new mongoose.Schema({
   name: { type: String, required: true },
+  scope: String,
+  description: String,
+  objectives: String,
   projectId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Project",
