@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaEye, FaTrash, FaFilter } from "react-icons/fa";
-import { getFrameworks } from "../redux/apiCalls/frameworkSlice";
+import { getFrameworks } from "../redux/apiCalls/frameworkApiCall";
 import { useDispatch, useSelector } from "react-redux";
 
 const Frameworks = () => {

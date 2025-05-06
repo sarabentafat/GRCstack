@@ -39,7 +39,6 @@ const Login = () => {
 
   return (
     <div className="flex md:flex w-full items-center justify-between h-screen">
-      <div className="hidden md:block bg-blue-50 h-screen md:w-1/2 lg:w-2/3"></div>
       <div className="flex w-[95%] mx-auto md:w-1/2 lg:w-1/3  px-7 mt-2 rounded-lg   flex-col justify-center md:mx-auto  ">
         <h2 className="text-2xl font-bold text-center">{t("login.welcome")}</h2>
         <form onSubmit={handleSubmit} className="space-y-6">

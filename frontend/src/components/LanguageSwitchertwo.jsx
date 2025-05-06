@@ -49,7 +49,7 @@ const LanguageSwitchertwo= () => {
               className="block px-4 py-2 text-left w-full hover:bg-gray-100"
               onClick={() => changeLanguage("fr")}
             >
-              {t("french", { defaultValue: "Françairs" })}
+              {t("french", { defaultValue: "Français" })}
             </button>
           </li>
         </ul>

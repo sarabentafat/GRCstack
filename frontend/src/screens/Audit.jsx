@@ -63,12 +63,12 @@ const LevelItem = ({ level, depth }) => {
 
         <div>
           <h2 className="text-lg font-semibold">Scope</h2>
-          {/* <p className="text-sm text-gray-700">{audit.scope}</p> */}
+          <p className="text-sm text-gray-700">{auditData.scope}</p>
         </div>
 
         <div>
           <h2 className="text-lg font-semibold">Objectives</h2>
-          {/* <p className="text-sm text-gray-700">{audit.objectives}</p> */}
+          <p className="text-sm text-gray-700">{auditData.objectives}</p>
         </div>
 
         <div>

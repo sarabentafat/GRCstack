@@ -70,7 +70,7 @@ const LeftSide = () => {
       >
         <div className="flex text-2xl justify-center gap-1 items-center mb-14 text-blue-500">
          
-          Grcstack
+          SmartGrc
         </div>
 
         {/* Projects with dropdown */}

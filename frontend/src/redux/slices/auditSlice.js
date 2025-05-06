@@ -8,11 +8,11 @@ const auditSlice = createSlice({
     error: null,
   },
   reducers: {
-    setaudit: (state, action) => {
-      state.audit = action.payload;
-    },
     setLoading: (state, action) => {
       state.loading = action.payload;
+    },
+    setAudit: (state, action) => {
+      state.audit = action.payload;
     },
     setError: (state, action) => {
       state.error = action.payload;

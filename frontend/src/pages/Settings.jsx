@@ -169,19 +169,7 @@ const Settings = () => {
           </label>
           <LanguageSwitchertwo />
         </div>
-        <div className="mb-6">
-          <label className="font-bold dark:text-white text-gray-700">
-            {t("settings.profileVisibility")}
-          </label>
-          <select
-            value={profileVisibility}
-            onChange={(e) => setProfileVisibility(e.target.value)}
-            className="mt-1 dark:bg-second p-2 block w-full rounded-md shadow-sm"
-          >
-            <option>{t("settings.public")}</option>
-            <option>{t("settings.private")}</option>
-          </select>
-        </div>
+
 
       </div>
 
