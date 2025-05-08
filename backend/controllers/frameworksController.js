@@ -1,9 +1,13 @@
 const XLSX = require("xlsx");
 const Framework = require("../models/Framework");
+const fs = require("fs/promises"); // ✅ THIS is what we need
 
+const path = require("path");
 const axios = require("axios");
 const FormData = require("form-data"); // ✅ use npm form-data package
 const FrameworkMapping = require("../models/FrameworkMapping"); // make sure path is correct
+const { default: mongoose } = require("mongoose");
+const Audit = require("../models/Audit");
 
 const parseExcelRowsToTree = (rows) => {
   const tree = [];
@@ -19,17 +23,15 @@ const parseExcelRowsToTree = (rows) => {
 
     const [level, level_name, identifier, title, content, is_ratable] = row;
 
-    // Provide defaults for missing required fields
     const levelNum =
-      level != null && !isNaN(parseInt(level, 10)) ? parseInt(level, 10) : 1; // Default to level 1 if missing or invalid
+      level != null && !isNaN(parseInt(level, 10)) ? parseInt(level, 10) : 1;
     const safeIdentifier = identifier
       ? identifier.toString().trim()
-      : `unknown_${i}`; // Default identifier if missing
+      : `unknown_${i}`;
     const safeContent = content
       ? content.toString().trim()
-      : "No content provided"; // Default content if missing
+      : "No content provided";
 
-    // Log if defaults were used
     if (level == null || isNaN(parseInt(level, 10))) {
       console.warn(`Row ${i}: Missing or invalid level, defaulting to 1`);
     }
@@ -45,6 +47,7 @@ const parseExcelRowsToTree = (rows) => {
     }
 
     const node = {
+      _id: new mongoose.Types.ObjectId(), // ✅ Add _id directly
       level: levelNum,
       level_name: level_name ? level_name.toString().trim() : "",
       identifier: safeIdentifier,
@@ -57,21 +60,17 @@ const parseExcelRowsToTree = (rows) => {
       children: [],
     };
 
-    // Find the nearest available parent if the direct parent is missing
     let parentLevel = levelNum - 1;
     let parent = parents[parentLevel];
 
-    // If no direct parent, look for the nearest parent level (e.g., level 1 for a level 3)
     while (parentLevel > 0 && !parent) {
       parentLevel--;
       parent = parents[parentLevel];
     }
 
     if (levelNum === 1 || !parent) {
-      // If level 1 or no parent found, add to the root tree
       tree.push(node);
     } else {
-      // Add to the nearest parent's children
       parent.children.push(node);
     }
 
@@ -154,6 +153,11 @@ const uploadFramework = async (req, res) => {
         .json({ message: "No valid data parsed from Excel file." });
     }
 
+    // Add _id to each level
+    const levelsWithIds = levelsTree.map((level) => ({
+      ...level,
+      _id: new mongoose.Types.ObjectId(),
+    }));
 
     const framework = new Framework({
       name: req.body.name?.trim() || "Untitled Framework",
@@ -163,7 +167,6 @@ const uploadFramework = async (req, res) => {
       version: req.body.version?.trim() || "1.0",
       provider: req.body.provider?.trim() || "Unknown",
       language: req.body.language?.trim() || "en",
-
     });
 
     await framework.save();
@@ -301,10 +304,158 @@ const mappedFramework = async (req, res) => {
   }
 };
 
+const createAuditFromMapping = async (req, res) => {
+  console.log("Starting audit creation...");
+
+  const { projectId } = req.params; // Get projectId from request parameters
+  const { sourceAuditId, targetFrameworkId } = req.body;
+
+  try {
+    // 1. Get the source audit (old audit) and its framework
+    const sourceAudit = await Audit.findById(sourceAuditId);
+    if (!sourceAudit) {
+      return res.status(404).json({ message: "Source audit not found." });
+    }
+
+    const sourceFramework = await Framework.findById(sourceAudit.frameworkId);
+    if (!sourceFramework) {
+      return res.status(404).json({ message: "Source framework not found." });
+    }
+
+    // 2. Get the target framework for the new audit
+    const targetFramework = await Framework.findById(targetFrameworkId);
+    if (!targetFramework) {
+      return res.status(404).json({ message: "Target framework not found." });
+    }
+
+    // 3. Flatten levels from both frameworks (source and target)
+    const flatten = (levels) => {
+      return levels.reduce((acc, lvl) => {
+        acc.push(lvl);
+        if (Array.isArray(lvl.children) && lvl.children.length > 0) {
+          acc.push(...flatten(lvl.children));
+        }
+        return acc;
+      }, []);
+    };
+
+    const sourceLevels = flatten(sourceFramework.levels);
+    const targetLevels = flatten(targetFramework.levels);
+
+    // 4. Prepare the data for mapping
+    const formattedSource = {
+      levels: sourceLevels.map((level) => ({
+        level: level.level,
+        level_name: level.level_name,
+        identifier: level.identifier,
+        title: level.title,
+        content: level.content,
+        is_ratable: level.is_ratable,
+        status: level.status,
+        evidence: level.evidence,
+      })),
+    };
+
+    const formattedTarget = {
+      levels: targetLevels.map((level) => ({
+        level: level.level,
+        level_name: level.level_name,
+        identifier: level.identifier,
+        title: level.title,
+        content: level.content,
+        is_ratable: level.is_ratable,
+        status: level.status,
+        evidence: level.evidence,
+      })),
+    };
+
+    // Log formatted source and target for debugging
+    console.log("Formatted source:", JSON.stringify(formattedSource, null, 2));
+    console.log("Formatted target:", JSON.stringify(formattedTarget, null, 2));
+
+    // 5. Create temporary files for mapping
+    const tempDir = path.join(__dirname, "temp"); // Temporary directory for files
+    await fs.mkdir(tempDir, { recursive: true });
+
+    const sourceFilePath = path.join(tempDir, "source.json");
+    const targetFilePath = path.join(tempDir, "target.json");
+
+    await fs.writeFile(
+      sourceFilePath,
+      JSON.stringify(formattedSource, null, 2)
+    );
+    await fs.writeFile(
+      targetFilePath,
+      JSON.stringify(formattedTarget, null, 2)
+    );
+
+    // 6. Fetch the mapping data from /map_json endpoint
+    const response = await axios.post("http://127.0.0.1:8000/map_json", {
+      file_a: sourceFilePath,
+      file_b: targetFilePath,
+    });
+
+    const mappingTable = response.data.mappings;
+
+    // 7. Apply the mapping to transfer statuses
+    for (const { from, to } of mappingTable) {
+      const sourceLevel = sourceLevels.find((lvl) => lvl.identifier === from);
+      const targetLevel = targetLevels.find((lvl) => lvl.identifier === to);
+
+      if (sourceLevel && targetLevel) {
+        // Only update status if it's not "Not Started"
+        if (sourceLevel.status !== "Not Started") {
+          targetLevel.status = sourceLevel.status;
+        }
+      }
+    }
+
+    // 8. Save the updated target framework
+    targetFramework.markModified("levels");
+    await targetFramework.save();
+
+    // 9. Create the new audit based on the target framework and project ID
+    const newAudit = new Audit({
+      name: `Audit from mapping - ${Date.now()}`,
+      scope: sourceAudit.scope,
+      description: sourceAudit.description,
+      objectives: sourceAudit.objectives,
+      projectId, // Link to the correct project
+      frameworkId: targetFrameworkId, // Link to the new framework
+      status: 0, // To be calculated below
+    });
+
+    // 10. Recalculate compliance % for the new audit
+    const compliant = targetLevels.filter(
+      (lvl) => lvl.status === "Compliant"
+    ).length;
+    const total = targetLevels.length;
+    newAudit.status =
+      total === 0 ? 0 : Number(((compliant / total) * 100).toFixed(3));
+
+    await newAudit.save();
+
+    // 11. Respond with success
+    res.status(201).json({
+      message: "New audit created from mapping successfully.",
+      audit: newAudit,
+    });
+
+    // Cleanup: Remove the temporary files after processing
+    await fs.rm(tempDir, { recursive: true, force: true });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error while fetching the mapping or creating the audit.",
+      error: error.message,
+    });
+  }
+};
 
 module.exports = {
   uploadFramework,
   getFrameworks,
   mappedFramework,
   getFrameworkById,
+  createAuditFromMapping,
 };

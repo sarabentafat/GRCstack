@@ -15,24 +15,11 @@ const AuditSchema = new mongoose.Schema({
     ref: "Framework",
     required: true,
   },
+  status: {
+  type: Number,
+  default: 0, // % completion: 0–100
+ },
   auditDate: { type: Date, default: Date.now },
-  findings: [
-    {
-      levelId: { type: mongoose.Schema.Types.ObjectId, ref: "Level" },
-      status: {
-        type: String,
-        enum: ["Compliant", "Non-Compliant"],
-        default: "Non-Compliant",
-      },
-      evidence: [
-        {
-          name: String,
-          fileUrl: String,
-          uploadedAt: { type: Date, default: Date.now },
-        },
-      ],
-    },
-  ],
   createdAt: { type: Date, default: Date.now },
 });
 

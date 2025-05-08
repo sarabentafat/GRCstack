@@ -3,6 +3,10 @@ const mongoose = require("mongoose");
 // Define the Level schema
 const LevelSchema = new mongoose.Schema(
   {
+    _id: {
+      type: mongoose.Schema.Types.ObjectId,
+      default: () => new mongoose.Types.ObjectId(),
+    },
     level: Number,
     level_name: String,
     identifier: String,
@@ -21,9 +25,9 @@ const LevelSchema = new mongoose.Schema(
         uploadedAt: { type: Date, default: Date.now },
       },
     ],
-    children: [this], // Recursive nesting (CAUTION: this is experimental)
+    children: [{ type: mongoose.Schema.Types.ObjectId, ref: "Level" }], // Reference to other levels
   },
-  { _id: false }
+  { _id: true }
 );
 
 // Create the model using the schema

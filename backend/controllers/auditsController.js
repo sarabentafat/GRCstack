@@ -3,6 +3,10 @@ const Audit = require("../models/Audit");
 const Project = require("../models/Project");
 const mongoose = require("mongoose");
 
+const Level = require("../models/Level");
+const Framework = require("../models/Framework");
+
+/**
 /**----------------------------------------------
  * @desc    Create a new audit and link it to a project
  * @route   POST /api/audits
@@ -196,9 +200,97 @@ const getAuditFromProject = asyncHandler(async (req, res) => {
   });
 });
 
+ /* @desc    Update level status and recalculate audit status
+ * @route   PUT /api/audits/:auditId/levels/:levelId/status
+ * @access  Private
+ */
+const updateLevelStatusAndAudit = asyncHandler(async (req, res) => {
+  const { projectId, auditId } = req.params;
+  const { status, identifier } = req.body;
+
+  if (!["Compliant", "Non-Compliant", "Not Applicable"].includes(status)) {
+    return res.status(400).json({ message: "Invalid status value." });
+  }
+
+  // Step 1: Find the audit
+  const audit = await Audit.findOne({ _id: auditId, projectId });
+  if (!audit) {
+    return res.status(404).json({ message: "Audit not found." });
+  }
+
+  // Step 2: Find the related framework
+  const framework = await Framework.findById(audit.frameworkId);
+  if (!framework || !Array.isArray(framework.levels)) {
+    return res.status(404).json({ message: "Framework or levels not found." });
+  }
+
+  // Step 3: Update the level status
+  let updated = false;
+
+  const updateLevel = (levels) => {
+    for (let level of levels) {
+      if (level.identifier === identifier) {
+        level.status = status;
+        updated = true;
+        return;
+      }
+      if (Array.isArray(level.children)) {
+        updateLevel(level.children);
+      }
+    }
+  };
+
+  updateLevel(framework.levels);
+
+  if (!updated) {
+    return res
+      .status(404)
+      .json({ message: "Level with given identifier not found." });
+  }
+
+  framework.markModified("levels");
+  await framework.save();
+
+  // Re-fetch updated framework levels
+  const updatedFramework = await Framework.findById(audit.frameworkId);
+
+  // Step 4: Recalculate compliance percentage
+  const flatten = (levels) => {
+    return levels.reduce((acc, lvl) => {
+      acc.push(lvl);
+      if (Array.isArray(lvl.children)) {
+        acc.push(...flatten(lvl.children));
+      }
+      return acc;
+    }, []);
+  };
+
+  const allLevels = flatten(updatedFramework.levels);
+  const total = allLevels.length;
+  const compliant = allLevels.filter(
+    (lvl) => lvl.status === "Compliant"
+  ).length;
+
+  const percentage = total === 0 ? 0 : (compliant / total) * 100;
+  const formattedPercentage = Number(percentage.toFixed(3)); // 👈 round to 3 decimal places
+
+  audit.status = formattedPercentage;
+  await audit.save();
+
+  res.status(200).json({
+    message: "Level status and audit compliance updated successfully.",
+    levelStatus: status,
+    auditStatus: formattedPercentage,
+  });
+});
+
+
 module.exports = {
   createAudit,
   deleteAuditFromProject,
   getAuditFromProject,
   addAuditToProject,
+  updateLevelStatusAndAudit,
+  
+  
 };
