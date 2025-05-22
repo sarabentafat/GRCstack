@@ -1,7 +1,16 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import {
+  CheckCircle,
+  ChevronDown,
+  Menu,
+  X,
+  Shield,
+  BarChart3,
+  FileCheck,
+  Quote,
+} from "lucide-react";
 
 // Mock data for testimonials
 const testimonials = [
@@ -31,52 +40,6 @@ const testimonials = [
   },
 ];
 
-// Pricing plans
-const pricingPlans = [
-  {
-    name: "Starter",
-    price: "$99",
-    period: "per month",
-    features: [
-      "Up to 3 compliance frameworks",
-      "Basic AI mapping",
-      "Standard reports",
-      "Email support",
-    ],
-    cta: "Start Free Trial",
-    popular: false,
-  },
-  {
-    name: "Professional",
-    price: "$299",
-    period: "per month",
-    features: [
-      "Up to 10 compliance frameworks",
-      "Advanced AI mapping",
-      "Custom reports & dashboards",
-      "Priority support",
-      "Audit trail",
-    ],
-    cta: "Start Free Trial",
-    popular: true,
-  },
-  {
-    name: "Enterprise",
-    price: "Custom",
-    period: "",
-    features: [
-      "Unlimited frameworks",
-      "Full AI capabilities",
-      "Advanced integrations",
-      "Dedicated account manager",
-      "Custom implementation",
-      "SLA guarantees",
-    ],
-    cta: "Contact Sales",
-    popular: false,
-  },
-];
-
 // FAQ items
 const faqItems = [
   {
@@ -87,21 +50,21 @@ const faqItems = [
   {
     question: "Can GrcStack integrate with our existing tools?",
     answer:
-      "Yes, GrcStack offers API integrations with popular GRC tools, ticketing systems, and documentation platforms. Our Professional and Enterprise plans include custom integration support.",
+      "Yes, GrcStack offers API integrations with popular GRC tools, ticketing systems, and documentation platforms. Our open source version includes integration support with documentation on how to extend functionality.",
   },
   {
     question: "How long does implementation typically take?",
     answer:
-      "Most customers are up and running within 2-4 weeks. Our Starter plan can be self-implemented in days, while Enterprise implementations include dedicated onboarding support.",
+      "Most users are up and running within 2-4 weeks. Our self-hosted version can be implemented in days, while enterprise implementations may take longer depending on customization needs.",
   },
   {
     question: "Which compliance frameworks do you support?",
     answer:
-      "We support all major frameworks including ISO 27001, NIST CSF, PCI DSS, HIPAA, SOC 2, GDPR, and many more. New frameworks are added regularly based on customer demand.",
+      "We support all major frameworks including ISO 27001, NIST CSF, PCI DSS, HIPAA, SOC 2, GDPR, and many more. New frameworks are added regularly based on community contributions.",
   },
 ];
 
-const LandingPage = () => {
+function LandingPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const [activeFaq, setActiveFaq] = useState(null);
@@ -156,57 +119,45 @@ const LandingPage = () => {
               How It Works
             </a>
             <a
-              href="#pricing"
-              className="text-gray-700 hover:text-indigo-600 transition"
-            >
-              Pricing
-            </a>
-            <a
               href="#testimonials"
               className="text-gray-700 hover:text-indigo-600 transition"
             >
               Testimonials
             </a>
+            <a
+              href="#faq"
+              className="text-gray-700 hover:text-indigo-600 transition"
+            >
+              FAQ
+            </a>
           </nav>
 
           <div className="hidden md:flex items-center space-x-4">
-            <Link
-              to="/login"
+            <a
+              href="/login"
               className="text-indigo-600 hover:text-indigo-800 transition"
             >
               Login
-            </Link>
-            <Link
-              to="/signup"
+            </a>
+            <a
+              href="/signup"
               className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
             >
               Sign Up
-            </Link>
+            </a>
           </div>
 
           {/* Mobile menu button */}
           <button
             className="md:hidden text-gray-700"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Toggle menu"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d={
-                  isMenuOpen
-                    ? "M6 18L18 6M6 6l12 12"
-                    : "M4 6h16M4 12h16M4 18h16"
-                }
-              />
-            </svg>
+            {isMenuOpen ? (
+              <X className="h-6 w-6" />
+            ) : (
+              <Menu className="h-6 w-6" />
+            )}
           </button>
         </div>
 
@@ -229,32 +180,32 @@ const LandingPage = () => {
                 How It Works
               </a>
               <a
-                href="#pricing"
-                className="text-gray-700 hover:text-indigo-600 transition"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Pricing
-              </a>
-              <a
                 href="#testimonials"
                 className="text-gray-700 hover:text-indigo-600 transition"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Testimonials
               </a>
+              <a
+                href="#faq"
+                className="text-gray-700 hover:text-indigo-600 transition"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                FAQ
+              </a>
               <div className="flex flex-col space-y-2 pt-2 border-t border-gray-200">
-                <Link
-                  to="/login"
+                <a
+                  href="/login"
                   className="text-indigo-600 hover:text-indigo-800 transition"
                 >
                   Login
-                </Link>
-                <Link
-                  to="/signup"
+                </a>
+                <a
+                  href="/signup"
                   className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition text-center"
                 >
                   Sign Up
-                </Link>
+                </a>
               </div>
             </div>
           </div>
@@ -272,37 +223,31 @@ const LandingPage = () => {
             <p className="text-lg md:text-xl max-w-2xl mb-8 text-indigo-100">
               GrcStack helps you manage Governance, Risk, and Compliance with
               AI-powered mapping, automated audits, and clear visualizations—all
-              in one powerful platform.
+              in one powerful open-source platform.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <button className="bg-white text-indigo-600 font-semibold px-6 py-3 rounded-xl hover:bg-gray-100 transition shadow-lg transform hover:-translate-y-1 hover:shadow-xl">
-                Start Free Trial
-              </button>
+              <a
+                href="https://github.com/grcstack/grcstack"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-white text-indigo-600 font-semibold px-6 py-3 rounded-xl hover:bg-gray-100 transition shadow-lg transform hover:-translate-y-1 hover:shadow-xl"
+              >
+                GitHub Repository
+              </a>
               <button className="border-2 border-white text-white px-6 py-3 rounded-xl hover:bg-white hover:text-indigo-600 transition transform hover:-translate-y-1">
                 Watch Demo
               </button>
             </div>
             <div className="mt-8 text-indigo-200 flex items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 mr-2"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              <span>No credit card required for trial</span>
+              <CheckCircle className="h-5 w-5 mr-2" />
+              <span>100% Open Source</span>
             </div>
           </div>
           <div className="md:w-1/2 flex justify-center">
             <div className="relative">
               <div className="bg-white p-6 rounded-xl shadow-2xl transform rotate-2 transition-transform hover:rotate-0">
                 <img
-                  src="/placeholder.svg?height=400&width=500"
+                  src="/placeholder.svg?height=400&width=500&text=GrcStack+Dashboard"
                   alt="GrcStack Dashboard Preview"
                   className="rounded-lg"
                 />
@@ -357,20 +302,7 @@ const LandingPage = () => {
             {/* Feature 1 */}
             <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition border border-gray-100">
               <div className="w-14 h-14 bg-indigo-100 rounded-lg flex items-center justify-center mb-6">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-8 w-8 text-indigo-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-                  />
-                </svg>
+                <Shield className="h-8 w-8 text-indigo-600" />
               </div>
               <h3 className="text-xl font-semibold mb-3">AI-Powered Mapping</h3>
               <p className="text-gray-600 mb-4">
@@ -380,48 +312,15 @@ const LandingPage = () => {
               </p>
               <ul className="space-y-2 mb-4">
                 <li className="flex items-start">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-green-500 mr-2 mt-0.5"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+                  <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5" />
                   <span>Cross-framework mapping</span>
                 </li>
                 <li className="flex items-start">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-green-500 mr-2 mt-0.5"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+                  <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5" />
                   <span>80% reduction in mapping time</span>
                 </li>
                 <li className="flex items-start">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-green-500 mr-2 mt-0.5"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+                  <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5" />
                   <span>Continuous updates for new standards</span>
                 </li>
               </ul>
@@ -430,38 +329,14 @@ const LandingPage = () => {
                 className="text-indigo-600 font-medium hover:text-indigo-800 inline-flex items-center"
               >
                 Learn more
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4 ml-1"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
-                    clipRule="evenodd"
-                  />
-                </svg>
+                <ChevronDown className="h-4 w-4 ml-1 rotate-270" />
               </a>
             </div>
 
             {/* Feature 2 */}
             <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition border border-gray-100">
               <div className="w-14 h-14 bg-indigo-100 rounded-lg flex items-center justify-center mb-6">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-8 w-8 text-indigo-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                  />
-                </svg>
+                <BarChart3 className="h-8 w-8 text-indigo-600" />
               </div>
               <h3 className="text-xl font-semibold mb-3">Visual Dashboards</h3>
               <p className="text-gray-600 mb-4">
@@ -470,48 +345,15 @@ const LandingPage = () => {
               </p>
               <ul className="space-y-2 mb-4">
                 <li className="flex items-start">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-green-500 mr-2 mt-0.5"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+                  <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5" />
                   <span>Real-time compliance status</span>
                 </li>
                 <li className="flex items-start">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-green-500 mr-2 mt-0.5"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+                  <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5" />
                   <span>Customizable risk heat maps</span>
                 </li>
                 <li className="flex items-start">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-green-500 mr-2 mt-0.5"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+                  <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5" />
                   <span>Executive-ready reports</span>
                 </li>
               </ul>
@@ -520,38 +362,14 @@ const LandingPage = () => {
                 className="text-indigo-600 font-medium hover:text-indigo-800 inline-flex items-center"
               >
                 Learn more
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4 ml-1"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
-                    clipRule="evenodd"
-                  />
-                </svg>
+                <ChevronDown className="h-4 w-4 ml-1 rotate-270" />
               </a>
             </div>
 
             {/* Feature 3 */}
             <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition border border-gray-100">
               <div className="w-14 h-14 bg-indigo-100 rounded-lg flex items-center justify-center mb-6">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-8 w-8 text-indigo-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-                  />
-                </svg>
+                <FileCheck className="h-8 w-8 text-indigo-600" />
               </div>
               <h3 className="text-xl font-semibold mb-3">Automated Audits</h3>
               <p className="text-gray-600 mb-4">
@@ -560,48 +378,15 @@ const LandingPage = () => {
               </p>
               <ul className="space-y-2 mb-4">
                 <li className="flex items-start">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-green-500 mr-2 mt-0.5"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+                  <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5" />
                   <span>Automated evidence collection</span>
                 </li>
                 <li className="flex items-start">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-green-500 mr-2 mt-0.5"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+                  <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5" />
                   <span>Continuous compliance monitoring</span>
                 </li>
                 <li className="flex items-start">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-green-500 mr-2 mt-0.5"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+                  <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5" />
                   <span>Audit-ready documentation</span>
                 </li>
               </ul>
@@ -610,18 +395,7 @@ const LandingPage = () => {
                 className="text-indigo-600 font-medium hover:text-indigo-800 inline-flex items-center"
               >
                 Learn more
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4 ml-1"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
-                    clipRule="evenodd"
-                  />
-                </svg>
+                <ChevronDown className="h-4 w-4 ml-1 rotate-270" />
               </a>
             </div>
           </div>
@@ -710,9 +484,14 @@ const LandingPage = () => {
           </div>
 
           <div className="mt-16 text-center">
-            <button className="bg-indigo-600 text-white font-semibold px-8 py-3 rounded-xl hover:bg-indigo-700 transition shadow-md">
-              Schedule a Demo
-            </button>
+            <a
+              href="https://github.com/grcstack/grcstack"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-indigo-600 text-white font-semibold px-8 py-3 rounded-xl hover:bg-indigo-700 transition shadow-md"
+            >
+              View on GitHub
+            </a>
           </div>
         </div>
       </section>
@@ -722,7 +501,7 @@ const LandingPage = () => {
         <div className="container mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              What Our Customers Say
+              What Our Users Say
             </h2>
             <p className="text-lg text-gray-700 max-w-3xl mx-auto">
               Join hundreds of compliance professionals who trust GrcStack.
@@ -732,14 +511,7 @@ const LandingPage = () => {
           <div className="max-w-4xl mx-auto">
             <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12 relative">
               <div className="absolute -top-5 left-1/2 transform -translate-x-1/2 text-indigo-600">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-12 w-12"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-                </svg>
+                <Quote className="h-12 w-12" />
               </div>
 
               <div className="mt-6">
@@ -800,7 +572,7 @@ const LandingPage = () => {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-20 px-6">
+      <section id="faq" className="py-20 px-6 bg-gray-50">
         <div className="container mx-auto max-w-4xl">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -820,26 +592,20 @@ const LandingPage = () => {
                 <button
                   className="w-full flex justify-between items-center p-4 text-left bg-white hover:bg-gray-50 transition"
                   onClick={() => toggleFaq(index)}
+                  aria-expanded={activeFaq === index}
+                  aria-controls={`faq-answer-${index}`}
                 >
                   <span className="font-semibold text-gray-900">
                     {item.question}
                   </span>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
+                  <ChevronDown
                     className={`h-5 w-5 text-gray-500 transition-transform ${
                       activeFaq === index ? "transform rotate-180" : ""
                     }`}
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+                  />
                 </button>
                 <div
+                  id={`faq-answer-${index}`}
                   className={`overflow-hidden transition-all duration-300 ${
                     activeFaq === index ? "max-h-40" : "max-h-0"
                   }`}
@@ -855,7 +621,9 @@ const LandingPage = () => {
           <div className="mt-12 text-center">
             <p className="text-gray-700 mb-4">Still have questions?</p>
             <a
-              href="#"
+              href="https://github.com/grcstack/grcstack/discussions"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center text-indigo-600 font-semibold hover:text-indigo-800"
             >
               <svg
@@ -870,7 +638,7 @@ const LandingPage = () => {
                   clipRule="evenodd"
                 />
               </svg>
-              Contact Support
+              Join the Discussion
             </a>
           </div>
         </div>
@@ -887,15 +655,20 @@ const LandingPage = () => {
             compliance journey.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <button className="bg-white text-indigo-600 font-semibold px-8 py-3 rounded-xl hover:bg-gray-100 transition shadow-lg">
-              Start Free Trial
-            </button>
+            <a
+              href="https://github.com/grcstack/grcstack"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-white text-indigo-600 font-semibold px-8 py-3 rounded-xl hover:bg-gray-100 transition shadow-lg"
+            >
+              Star on GitHub
+            </a>
             <button className="border-2 border-white text-white px-8 py-3 rounded-xl hover:bg-white hover:text-indigo-600 transition">
               Schedule Demo
             </button>
           </div>
           <p className="mt-6 text-sm text-indigo-200">
-            No credit card required. 14-day free trial.
+            100% open source. Free forever.
           </p>
         </div>
       </section>
@@ -941,12 +714,14 @@ const LandingPage = () => {
             <div>
               <div className="text-2xl font-bold mb-4">GrcStack</div>
               <p className="text-gray-400 mb-4">
-                Simplifying compliance management with AI-powered solutions.
+                Simplifying compliance management with open-source AI-powered
+                solutions.
               </p>
               <div className="flex space-x-4">
                 <a
                   href="#"
                   className="text-gray-400 hover:text-white transition"
+                  aria-label="Twitter"
                 >
                   <svg
                     className="h-6 w-6"
@@ -959,6 +734,7 @@ const LandingPage = () => {
                 <a
                   href="#"
                   className="text-gray-400 hover:text-white transition"
+                  aria-label="LinkedIn"
                 >
                   <svg
                     className="h-6 w-6"
@@ -969,8 +745,11 @@ const LandingPage = () => {
                   </svg>
                 </a>
                 <a
-                  href="#"
+                  href="https://github.com/grcstack/grcstack"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-gray-400 hover:text-white transition"
+                  aria-label="GitHub"
                 >
                   <svg
                     className="h-6 w-6"
@@ -988,7 +767,7 @@ const LandingPage = () => {
               <ul className="space-y-2">
                 <li>
                   <a
-                    href="#"
+                    href="#features"
                     className="text-gray-400 hover:text-white transition"
                   >
                     Features
@@ -999,7 +778,7 @@ const LandingPage = () => {
                     href="#"
                     className="text-gray-400 hover:text-white transition"
                   >
-                    Pricing
+                    Documentation
                   </a>
                 </li>
                 <li>
@@ -1012,7 +791,7 @@ const LandingPage = () => {
                 </li>
                 <li>
                   <a
-                    href="#"
+                    href="#testimonials"
                     className="text-gray-400 hover:text-white transition"
                   >
                     Reviews
@@ -1030,7 +809,7 @@ const LandingPage = () => {
             </div>
 
             <div>
-              <h3 className="text-lg font-semibold mb-4">Company</h3>
+              <h3 className="text-lg font-semibold mb-4">Community</h3>
               <ul className="space-y-2">
                 <li>
                   <a
@@ -1045,7 +824,7 @@ const LandingPage = () => {
                     href="#"
                     className="text-gray-400 hover:text-white transition"
                   >
-                    Careers
+                    Contributors
                   </a>
                 </li>
                 <li>
@@ -1061,7 +840,7 @@ const LandingPage = () => {
                     href="#"
                     className="text-gray-400 hover:text-white transition"
                   >
-                    Press
+                    Events
                   </a>
                 </li>
                 <li>
@@ -1143,7 +922,7 @@ const LandingPage = () => {
                 href="#"
                 className="text-gray-400 hover:text-white text-sm transition"
               >
-                Cookies
+                License
               </a>
             </div>
           </div>
@@ -1151,6 +930,6 @@ const LandingPage = () => {
       </footer>
     </div>
   );
-};
+}
 
 export default LandingPage;
