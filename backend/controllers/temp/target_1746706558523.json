@@ -6,6 +6,9 @@
       "identifier": "unknown_1",
       "title": "Secure your environment",
       "content": "No content provided",
+      "is_ratable": false,
+      "status": "Not Started",
+      "evidence": [],
       "children": [
         {
           "level": 2,
@@ -13,6 +16,9 @@
           "identifier": "1",
           "title": "Restrict Internet Access and Protect Critical Systems from General IT Environment",
           "content": "No content provided",
+          "is_ratable": false,
+          "status": "Not Started",
+          "evidence": [],
           "children": [
             {
               "level": 3,
@@ -20,6 +26,9 @@
               "identifier": "1.1",
               "title": "Swift Environment Protection",
               "content": "Ensure the protection of the user’s Swift infrastructure from potentially compromised elements of the general IT environment and external environment.",
+              "is_ratable": true,
+              "status": "Not Started",
+              "evidence": [],
               "children": []
             },
             {
@@ -28,6 +37,9 @@
               "identifier": "1.2",
               "title": "Operating System Privileged Account Control",
               "content": "Restrict and control the allocation and usage of administrator-level operating system \r\naccounts.",
+              "is_ratable": false,
+              "status": "Not Started",
+              "evidence": [],
               "children": []
             },
             {
@@ -36,6 +48,9 @@
               "identifier": "1.3",
               "title": "Virtualisation or Cloud Platform Protection",
               "content": "Secure the virtualisation or cloud platform and virtual machines (VMs) that host Swift-related \r\ncomponents to the same level as physical systems.",
+              "is_ratable": true,
+              "status": "Not Started",
+              "evidence": [],
               "children": []
             },
             {
@@ -44,6 +59,9 @@
               "identifier": "1.4",
               "title": "Restriction of Internet Access",
               "content": "Control/Protect Internet access from operator PCs and systems within the secure zone.",
+              "is_ratable": true,
+              "status": "Not Started",
+              "evidence": [],
               "children": []
             },
             {
@@ -52,6 +70,9 @@
               "identifier": "1.5",
               "title": "Customer Environment Protection",
               "content": "Ensure the protection of the customer’s connectivity infrastructure from external environment \r\nand potentially compromised elements of the general IT environment.",
+              "is_ratable": true,
+              "status": "Not Started",
+              "evidence": [],
               "children": []
             }
           ]
@@ -62,6 +83,9 @@
           "identifier": "2",
           "title": "Reduce Attack Surface and Vulnerabilities",
           "content": "No content provided",
+          "is_ratable": false,
+          "status": "Not Started",
+          "evidence": [],
           "children": [
             {
               "level": 3,
@@ -69,6 +93,9 @@
               "identifier": "2.1",
               "title": "Internal Data Flow Security",
               "content": "Ensure the confidentiality, integrity, and authenticity of application data flows between ’user’s \r\nSwift-related components.",
+              "is_ratable": true,
+              "status": "Not Started",
+              "evidence": [],
               "children": []
             },
             {
@@ -77,6 +104,9 @@
               "identifier": "2.2",
               "title": "Security Updates",
               "content": "Minimise the occurrence of known technical vulnerabilities on operator PCs and within the \r\nuser’s Swift infrastructure by ensuring vendor support, applying mandatory software updates, and applying timely \r\nsecurity updates aligned to the assessed risk.",
+              "is_ratable": true,
+              "status": "Not Started",
+              "evidence": [],
               "children": []
             },
             {
@@ -85,6 +115,9 @@
               "identifier": "2.3",
               "title": "System Hardening",
               "content": "Reduce the cyber-attack surface of Swift-related components by performing system \r\nhardening.",
+              "is_ratable": true,
+              "status": "Not Started",
+              "evidence": [],
               "children": []
             },
             {
@@ -93,6 +126,9 @@
               "identifier": "2.4A",
               "title": "Back Office Data Flow Security",
               "content": "Ensure the confidentiality, integrity, and mutual authenticity of data flowing between on\npremises or remote Swift infrastructure components and the back-office first hops they connect to.",
+              "is_ratable": true,
+              "status": "Not Started",
+              "evidence": [],
               "children": []
             },
             {
@@ -101,6 +137,9 @@
               "identifier": "2.5A",
               "title": "External Transmission Data Protection",
               "content": "Protect the confidentiality of Swift-related sensitive data transmitted or stored outside of the \r\nsecure zone as part of operational processes.",
+              "is_ratable": true,
+              "status": "Not Started",
+              "evidence": [],
               "children": []
             },
             {
@@ -109,6 +148,9 @@
               "identifier": "2.6",
               "title": "Operator Session Confidentiality and Integrity",
               "content": "Protect the confidentiality and integrity of interactive operator sessions that connect to the on\r\npremises or remote (operated by a service provider or outsourcing agent) Swift infrastructure or to a service \r\nprovider or outsourcing agent Swift-related applications.",
+              "is_ratable": true,
+              "status": "Not Started",
+              "evidence": [],
               "children": []
             },
             {
@@ -117,6 +159,9 @@
               "identifier": "2.7",
               "title": "Vulnerability Scanning",
               "content": "Identify known vulnerabilities within the user’s Swift environment by implementing a regular \nvulnerability scanning process and act upon results.",
+              "is_ratable": true,
+              "status": "Not Started",
+              "evidence": [],
               "children": []
             },
             {
@@ -125,6 +170,9 @@
               "identifier": "2.8",
               "title": "Outsourced Critical Activity Protection",
               "content": "Ensure the protection, in line with the CSCF, of the user’s Swift infrastructure from risks \r\nexposed by the outsourcing of critical activities.",
+              "is_ratable": true,
+              "status": "Not Started",
+              "evidence": [],
               "children": []
             },
             {
@@ -133,6 +181,9 @@
               "identifier": "2.9",
               "title": "Transaction Business Controls",
               "content": "Ensure outbound transaction activity within the expected bounds of normal business.",
+              "is_ratable": true,
+              "status": "Not Started",
+              "evidence": [],
               "children": []
             },
             {
@@ -141,6 +192,9 @@
               "identifier": "2.10",
               "title": "Application Hardening",
               "content": "Reduce the attack surface of Swift-related components by performing application hardening \r\non the Swift-compatible messaging and communication interfaces, the Swift connector and related applications.",
+              "is_ratable": true,
+              "status": "Not Started",
+              "evidence": [],
               "children": []
             },
             {
@@ -149,6 +203,9 @@
               "identifier": "2.11A",
               "title": "RMA Business Controls",
               "content": "Restrict transaction activity to validated and approved business counterparties.",
+              "is_ratable": true,
+              "status": "Not Started",
+              "evidence": [],
               "children": []
             }
           ]
@@ -159,6 +216,9 @@
           "identifier": "3",
           "title": "Physically Secure the Environment",
           "content": "No content provided",
+          "is_ratable": false,
+          "status": "Not Started",
+          "evidence": [],
           "children": [
             {
               "level": 3,
@@ -166,6 +226,9 @@
               "identifier": "3.1",
               "title": "Physical Security",
               "content": "Prevent unauthorised physical access to sensitive equipment, workplace environments, \nhosting sites, and storage.",
+              "is_ratable": true,
+              "status": "Not Started",
+              "evidence": [],
               "children": []
             }
           ]
@@ -178,6 +241,9 @@
       "identifier": "unknown_22",
       "title": "Know and Limit Access",
       "content": "No content provided",
+      "is_ratable": false,
+      "status": "Not Started",
+      "evidence": [],
       "children": [
         {
           "level": 2,
@@ -185,6 +251,9 @@
           "identifier": "4",
           "title": "Prevent Compromise of Credentials",
           "content": "No content provided",
+          "is_ratable": false,
+          "status": "Not Started",
+          "evidence": [],
           "children": [
             {
               "level": 3,
@@ -192,6 +261,9 @@
               "identifier": "4.1",
               "title": "Password Policy",
               "content": "Ensure passwords are sufficiently resistant against common password attacks by \r\nimplementing and enforcing an effective password policy.",
+              "is_ratable": true,
+              "status": "Not Started",
+              "evidence": [],
               "children": []
             },
             {
@@ -200,6 +272,9 @@
               "identifier": "4.2",
               "title": "Multi-Factor Authentication",
               "content": "Prevent that a compromise of a single authentication factor allows access into Swift-related \r\nsystems or applications by implementing multi-factor authentication.",
+              "is_ratable": true,
+              "status": "Not Started",
+              "evidence": [],
               "children": []
             }
           ]
@@ -210,6 +285,9 @@
           "identifier": "5",
           "title": "Manage Identities and Separate Privileges",
           "content": "No content provided",
+          "is_ratable": false,
+          "status": "Not Started",
+          "evidence": [],
           "children": [
             {
               "level": 3,
@@ -217,6 +295,9 @@
               "identifier": "5.1",
               "title": "Logical Access Control",
               "content": "Enforce the security principles of need-to-know access, least privilege, and separation of \r\nduties for operator accounts.",
+              "is_ratable": true,
+              "status": "Not Started",
+              "evidence": [],
               "children": []
             },
             {
@@ -225,6 +306,9 @@
               "identifier": "5.2",
               "title": "Token Management",
               "content": "Ensure the proper management, tracking, and use of connected and disconnected hardware \r\nauthentication or personal and software tokens (when tokens are used).",
+              "is_ratable": true,
+              "status": "Not Started",
+              "evidence": [],
               "children": []
             },
             {
@@ -233,6 +317,9 @@
               "identifier": "5.3A",
               "title": "Staff Screening Process",
               "content": "To the extent permitted and practicable, ensure the trustworthiness of staff operating the \r\nuser’s Swift environment by performing regular staff screening",
+              "is_ratable": true,
+              "status": "Not Started",
+              "evidence": [],
               "children": []
             },
             {
@@ -241,6 +328,9 @@
               "identifier": "5.4",
               "title": "Password Repository Protection",
               "content": "Protect physically and logically the repository of recorded passwords.",
+              "is_ratable": true,
+              "status": "Not Started",
+              "evidence": [],
               "children": []
             }
           ]
@@ -253,6 +343,9 @@
       "identifier": "unknown_31",
       "title": "Detect and Respond",
       "content": "No content provided",
+      "is_ratable": false,
+      "status": "Not Started",
+      "evidence": [],
       "children": [
         {
           "level": 2,
@@ -260,6 +353,9 @@
           "identifier": "6",
           "title": "Detect Anomalous Activity to Systems or \nTransaction Records",
           "content": "No content provided",
+          "is_ratable": false,
+          "status": "Not Started",
+          "evidence": [],
           "children": [
             {
               "level": 3,
@@ -267,6 +363,9 @@
               "identifier": "6.1",
               "title": "Malware Protection",
               "content": "Ensure that the user’s Swift infrastructure is protected against malware and act upon results.",
+              "is_ratable": true,
+              "status": "Not Started",
+              "evidence": [],
               "children": []
             },
             {
@@ -275,6 +374,9 @@
               "identifier": "6.2",
               "title": "Software Integrity",
               "content": "Ensure the software integrity of the Swift-related components and act upon results.",
+              "is_ratable": true,
+              "status": "Not Started",
+              "evidence": [],
               "children": []
             },
             {
@@ -283,6 +385,9 @@
               "identifier": "6.3",
               "title": "Database Integrity",
               "content": "Ensure the integrity of the database records for the Swift messaging interface or the \r\ncustomer connector and act upon results.",
+              "is_ratable": true,
+              "status": "Not Started",
+              "evidence": [],
               "children": []
             },
             {
@@ -291,6 +396,9 @@
               "identifier": "6.4",
               "title": "Logging and Monitoring",
               "content": "Record security events, detect and respond to anomalous actions and operations within the \r\nuser’s Swift environment.",
+              "is_ratable": true,
+              "status": "Not Started",
+              "evidence": [],
               "children": []
             },
             {
@@ -299,6 +407,9 @@
               "identifier": "6.5A",
               "title": "Intrusion Detection",
               "content": "Detect and contain anomalous network activity into the on-premises or remote Swift \r\nenvironment.",
+              "is_ratable": true,
+              "status": "Not Started",
+              "evidence": [],
               "children": []
             }
           ]
@@ -309,6 +420,9 @@
           "identifier": "7",
           "title": "Plan for Incident Response and Information \r\nSharing",
           "content": "No content provided",
+          "is_ratable": false,
+          "status": "Not Started",
+          "evidence": [],
           "children": [
             {
               "level": 3,
@@ -316,6 +430,9 @@
               "identifier": "7.1",
               "title": "Cyber Incident Response Planning",
               "content": "Ensure a consistent and effective approach for the management of cyber incidents.",
+              "is_ratable": true,
+              "status": "Not Started",
+              "evidence": [],
               "children": []
             },
             {
@@ -324,6 +441,9 @@
               "identifier": "7.2",
               "title": "Security Training and Awareness",
               "content": "No content provided",
+              "is_ratable": true,
+              "status": "Not Started",
+              "evidence": [],
               "children": []
             },
             {
@@ -332,6 +452,9 @@
               "identifier": "7.3A",
               "title": "Penetration Testing",
               "content": "Validate the operational security configuration and identify security gaps by performing \r\npenetration testing.",
+              "is_ratable": true,
+              "status": "Not Started",
+              "evidence": [],
               "children": []
             },
             {
@@ -340,6 +463,9 @@
               "identifier": "7.4A",
               "title": "Scenario-based Risk Assessment",
               "content": "Evaluate the risk and readiness of the organisation based on plausible cyber-attack \r\nscenarios.",
+              "is_ratable": true,
+              "status": "Not Started",
+              "evidence": [],
               "children": []
             }
           ]

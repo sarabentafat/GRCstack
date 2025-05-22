@@ -1,74 +1,68 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getUserProfile } from "../redux/apiCalls/profileApiCall";
-import { useNavigate, useParams } from "react-router-dom";
-import { fetchPacketsByUserId, fetchPacketsP, fetchUserPackets } from "../redux/apiCalls/packetApiCall";
-import CardPacket from "../components/CardPacket";
+"use client";
 
-const Profile = () => {
-  const { profileId } = useParams();
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+import { useEffect, useState } from "react";
 
+const Profile = ({ profileId }) => {
+  const [loading, setLoading] = useState(true);
+  const [userProfile, setUserProfile] = useState(null);
   const [localPackets, setLocalPackets] = useState([]);
-
-  const authUser = useSelector((state) => state.auth.user);
-  const userProfile = useSelector((state) => state.profile.profile);
-  const { packetsp, loading } = useSelector((state) => state.packet);
-  const userpackets = useSelector((state) => state.packet.userpackets);
+  const [authUser, setAuthUser] = useState({ _id: "user123" }); // Mock user data
 
   useEffect(() => {
-   
-    if (authUser._id === profileId) {
-      dispatch(getUserProfile(authUser._id));
-      dispatch(fetchUserPackets(authUser._id));
-      setLocalPackets(userpackets)
-      
-    }else{
-      
-       dispatch(getUserProfile(profileId));
-       dispatch(fetchPacketsP(profileId));
-       setLocalPackets(packetsp);
-     
-    }
-  }, [dispatch, profileId, authUser.id]);
+    // Mock function to fetch user profile
+    const fetchUserProfile = async (id) => {
+      try {
+        // Simulate API call
+        setTimeout(() => {
+          setUserProfile({
+            username: "Mohamed Belaili",
+            bio: "Student",
+            profilePic: { url: "/placeholder.svg?height=96&width=96" },
+          });
+          setLoading(false);
+        }, 1000);
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+        setLoading(false);
+      }
+    };
 
 
-  if (loading) return <div>Loading...</div>;
+    fetchUserProfile(profileId);
+    fetchPackets(profileId);
+  }, [profileId]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
+      </div>
+    );
+  }
 
   return (
-    <div className="text-black dark:text-white lg:w-[80%]">
-      {/* profile */}
-      <div className="rounded-lg p-4 flex flex-col justify-between items-center text-center">
+    <div className="text-black dark:text-white lg:w-[80%] mx-auto p-4">
+      {/* Profile Section */}
+      <div className="rounded-lg p-6 flex flex-col justify-between items-center text-center bg-white dark:bg-gray-800 shadow-sm mb-6">
         <img
-          className="w-24 h-24 rounded-full"
-          src={userProfile?.profilePic?.url || "../assets/images/profile.jfif"}
+          className="w-24 h-24 rounded-full object-cover border-2 border-indigo-500"
+          src={
+            userProfile?.profilePic?.url ||
+            "/placeholder.svg?height=96&width=96"
+          }
           alt="Profile"
         />
-        <div className="ml-2">
-          <h1 className="font-bold">
+        <div className="mt-4">
+          <h1 className="font-bold text-xl">
             {userProfile?.username || "Dr Mohamed Belaili"}
           </h1>
-          <p className="text-gray-500">{userProfile?.bio || "Student"}</p>
+          <p className="text-gray-500 dark:text-gray-400">
+            {userProfile?.bio || "Student"}
+          </p>
         </div>
       </div>
-      {/* accomplishment */}
-      <p className="text-lg font-bold">Accomplishments</p>
-      <p className="mb-5">The user doesn't have accomplishments for now.</p>
-      {/* packets */}
-      <p className="text-lg font-bold">Packets</p>
-      <div className="flex flex-col gap-2">
-        {localPackets ? (
-          localPackets.map((packet) => (
-            <div key={packet?._id} className="mt-1">
-              <CardPacket packet={packet} />
-            </div>
-          ))
-        ) : (
-          <p>No favorite packets found.</p>
-        )}
-      </div>
-      <div>Folders</div>
+
+
     </div>
   );
 };

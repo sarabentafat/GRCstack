@@ -31,9 +31,11 @@ import Frameworks from "./screens/Frameworks";
 import Threats from "./screens/Threats";
 import Evidences from "./screens/Evidences";
 import Project from "./screens/Project";
-import Audit from "./screens/Audit";
+
 import Framework from "./screens/Framework";
 import Mapping from "./screens/Mapping";
+import Projects from "./screens/Projects";
+import Audit from "./components/Audit";
 
 const router = createBrowserRouter([
   {
@@ -60,6 +62,15 @@ const router = createBrowserRouter([
       {
         path: "admin",
         element: <Admin />,
+      },
+
+      {
+        path: "profile/:profileId",
+        element: <Profile />,
+      },
+      {
+        path: "projects",
+        element: <Projects />,
       },
       {
         path: "frameworks",
@@ -103,10 +114,6 @@ const router = createBrowserRouter([
         element: <Settings />,
       },
 
-      {
-        path: "profile/:profileId",
-        element: <Profile />,
-      },
       {
         path: "classes/packet/:id",
         element: <Packet />,

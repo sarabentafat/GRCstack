@@ -1,32 +1,27 @@
-import React, { useEffect, useState } from "react";
-import { HiOutlineFolderOpen } from "react-icons/hi2";
-import { GiImperialCrown } from "react-icons/gi";
-import { MdOutlineReportProblem } from "react-icons/md";
-import { BsClipboardCheck } from "react-icons/bs";
-import { TbMapSearch } from "react-icons/tb";
-import { PiBooksBold } from "react-icons/pi";
-import {
-  IoSettingsOutline,
-  IoMenuOutline,
-  IoCloseOutline,
-  IoChevronDown,
-  IoChevronUp,
-} from "react-icons/io5";
-import { Link, Outlet, useLocation } from "react-router-dom";
-import LogoutButton from "./LogoutButton";
-import logo from "../assets/images/brainy.svg";
-import { useTranslation } from "react-i18next";
+"use client";
 
-import { useDispatch, useSelector } from "react-redux";
-import { getProjects } from "../redux/apiCalls/projectApiCall";
+import { useState } from "react";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import {
+  ClipboardCheck,
+  Crown,
+  FolderOpen,
+  LogOut,
+  MapPin,
+  Menu,
+  Settings,
+  Shield,
+  X,
+  ChevronDown,
+  ChevronUp,
+  AlertTriangle,
+  BookOpen,
+} from "lucide-react";
+import { logoutUser } from "../redux/apiCalls/authApiCall";
+import { useDispatch } from "react-redux";
 
 const LeftSide = () => {
-  const dispatch=useDispatch();
-  useEffect(() => {
-    dispatch(getProjects());
-  },[dispatch]);
-  const projects= useSelector((state) => state.project.projects);
-  console.log(projects);
   const { t } = useTranslation();
   const location = useLocation();
   const [activeLink, setActiveLink] = useState("/accueil");
@@ -37,203 +32,206 @@ const LeftSide = () => {
     setActiveLink(path);
     setIsSidebarOpen(false);
   };
-
+  const dispatch=useDispatch()
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    dispatch(logoutUser());
+    navigate("/");
+  };
   const toggleDropdown = (key) => {
     setOpenDropdown(openDropdown === key ? null : key);
   };
 
   const linkClasses = (path) =>
-    `py-3 flex px-10 items-center justify-between ${
+    `py-3 flex px-6 items-center justify-between rounded-lg transition-all duration-200 ${
       activeLink === path
-        ? "bg-blue-50 dark:bg-main border-l-4 border-blue-500 text-blue-500"
-        : "hover:bg-blue-50 hover:border-l-4 hover:border-blue-500 hover:text-blue-500 dark:hover:bg-main dark:hover:border-blue-900"
+        ? "bg-gradient-to-r from-indigo-50 to-indigo-100 dark:from-indigo-900/20 dark:to-indigo-800/20 text-indigo-600 dark:text-indigo-400 font-medium"
+        : "hover:bg-indigo-50 hover:text-indigo-600 dark:hover:bg-indigo-900/10 dark:hover:text-indigo-400"
     }`;
 
   return (
-    <div className="min-h-screen h-full dark:bg-gray-900 bg-blue-50 dark:text-white flex">
+    <div className="min-h-screen h-full dark:bg-gray-900 bg-gray-50 dark:text-white flex">
       {/* Hamburger menu */}
-      <div className="lg:hidden p-4 fixed top-5 left-1 z-40">
-        <button onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
-          {isSidebarOpen ? (
-            <IoCloseOutline size={30} />
-          ) : (
-            <IoMenuOutline size={35} />
-          )}
+      <div className="lg:hidden fixed top-4 left-4 z-40 bg-white dark:bg-gray-800 p-2 rounded-md shadow-md">
+        <button
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+          className="text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-gray-900/20 p-1 rounded-md"
+          aria-label={isSidebarOpen ? "Close menu" : "Open menu"}
+        >
+          {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
 
       {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 w-[250px] bg-white text-gray-500 dark:bg-second dark:text-white h-screen pt-10 font-bold transition-transform transform ${
+        className={`fixed top-0 left-0 w-[280px] bg-white text-gray-600 dark:bg-gray-800 dark:text-gray-200 h-screen pt-6 shadow-lg transition-transform transform ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0 lg:w-[20%] z-30`}
+        } lg:translate-x-0 lg:w-[20%] z-30 overflow-y-auto`}
       >
-        <div className="flex text-2xl justify-center gap-1 items-center mb-14 text-blue-500">
-         
-          SmartGrc
+        {/* Logo */}
+        <div className="flex text-2xl justify-center gap-1 items-center mb-10 px-6">
+          <Shield className="h-8 w-8 text-indigo-600 dark:text-indigo-400" />
+          <span className="font-bold text-indigo-600 dark:text-indigo-400">
+            SmartGRC
+          </span>
         </div>
 
-        {/* Projects with dropdown */}
-        <div>
-          <button
-            onClick={() => toggleDropdown("projects")}
-            className={linkClasses("/user/accueil")}
+        {/* Navigation Links */}
+        <div className="space-y-1 px-3">
+          {/* Projects */}
+          <Link
+            to="/user/projects"
+            className={linkClasses("/user/projects")}
+            onClick={() => handleLinkClick("/user/projects")}
           >
-            <div className="flex items-center gap-2">
-              <HiOutlineFolderOpen size={25} />
-              {t("Projects")}
+            <div className="flex items-center gap-3">
+              <FolderOpen className="h-5 w-5" />
+              <span>{t("Projects")}</span>
             </div>
-            {openDropdown === "projects" ? <IoChevronUp /> : <IoChevronDown />}
-          </button>
-          {openDropdown === "projects" && (
-            <div>
-              {projects.length > 0 ? (
-                projects.map((project) => (
-                  <Link
-                    key={project._id}
-                    to={`/user/project/${project._id}`}
-                    className={`ml-12 flex text-sm text-gray-600 dark:text-white gap-2 ${
-                      location.pathname === `/user/projects/${project._id}`
-                        ? "text-blue-500 font-bold"
-                        : ""
-                    }`}
-                  >
-                    {project.name}
-                  </Link>
-                ))
+          </Link>
+
+          {/* Governance */}
+          <Link
+            to="/user/classes"
+            className={linkClasses("/user/classes")}
+            onClick={() => handleLinkClick("/user/classes")}
+          >
+            <div className="flex items-center gap-3">
+              <Crown className="h-5 w-5" />
+              <span>{t("Governance")}</span>
+            </div>
+          </Link>
+
+          {/* Risk */}
+          <Link
+            to="/user/documents"
+            className={linkClasses("/user/documents")}
+            onClick={() => handleLinkClick("/user/documents")}
+          >
+            <div className="flex items-center gap-3">
+              <AlertTriangle className="h-5 w-5" />
+              <span>{t("Risk")}</span>
+            </div>
+          </Link>
+
+          {/* Compliance with dropdown */}
+          <div className="relative">
+            <button
+              onClick={() => toggleDropdown("compliance")}
+              className={`w-full text-left ${linkClasses("/user/compliance")}`}
+            >
+              <div className="flex items-center gap-3">
+                <ClipboardCheck className="h-5 w-5" />
+                <span>{t("Compliance")}</span>
+              </div>
+              {openDropdown === "compliance" ? (
+                <ChevronUp className="h-4 w-4" />
               ) : (
-                <div>No projects available</div>
+                <ChevronDown className="h-4 w-4" />
               )}
-            </div>
-          )}
-        </div>
-
-        {/* Governance */}
-        <Link
-          to="/user/classes"
-          className={linkClasses("/user/classes")}
-          onClick={() => handleLinkClick("/user/classes")}
-        >
-          <div className="flex items-center gap-2">
-            <GiImperialCrown size={25} />
-            {t("Governnce")}
-          </div>
-        </Link>
-
-        {/* Risk */}
-        <Link
-          to="/user/documents"
-          className={linkClasses("/user/documents")}
-          onClick={() => handleLinkClick("/user/documents")}
-        >
-          <div className="flex items-center gap-2">
-            <MdOutlineReportProblem size={25} />
-            {t("Risk")}
-          </div>
-        </Link>
-
-        {/* Compliance with dropdown */}
-        <div>
-          <button
-            onClick={() => toggleDropdown("compliance")}
-            className={linkClasses("/user/favorite")}
-          >
-            <div className="flex items-center gap-2">
-              <BsClipboardCheck size={25} />
-              {t("Compliance")}
-            </div>
-            {openDropdown === "compliance" ? (
-              <IoChevronUp />
-            ) : (
-              <IoChevronDown />
+            </button>
+            {openDropdown === "compliance" && (
+              <div className="ml-9 mt-1 space-y-1 pl-3 border-l-2 border-indigo-200 dark:border-indigo-800">
+                <Link
+                  to="/user/audits"
+                  onClick={() => handleLinkClick("/user/audits")}
+                  className="block py-2 px-3 text-sm rounded-md hover:bg-indigo-50 dark:hover:bg-indigo-900/10 hover:text-indigo-600 dark:hover:text-indigo-400"
+                >
+                  Audits
+                </Link>
+                <Link
+                  to="/user/evidences"
+                  onClick={() => handleLinkClick("/user/evidences")}
+                  className="block py-2 px-3 text-sm rounded-md hover:bg-indigo-50 dark:hover:bg-indigo-900/10 hover:text-indigo-600 dark:hover:text-indigo-400"
+                >
+                  Evidences
+                </Link>
+              </div>
             )}
-          </button>
-          {openDropdown === "compliance" && (
-            <div className="ml-12 flex flex-col text-sm text-gray-600 dark:text-white gap-2">
-              <Link
-                to="/user/audits"
-                onClick={() => handleLinkClick("/user/audits")}
-              >
-                Audits
-              </Link>
-              <Link
-                to="/user/evidences"
-                onClick={() => handleLinkClick("/user/evidences")}
-              >
-                Evidences
-              </Link>
-            </div>
-          )}
-        </div>
-
-        {/* Settings */}
-        <Link
-          to="/user/settings"
-          className={linkClasses("/user/settings")}
-          onClick={() => handleLinkClick("/user/settings")}
-        >
-          <div className="flex items-center gap-2">
-            <IoSettingsOutline size={25} />
-            {t("leftside.settings")}
           </div>
-        </Link>
 
-        {/* Mapping */}
-        <Link
-          to="/user/mapping"
-          className={linkClasses("/user/shop")}
-          onClick={() => handleLinkClick("/user/shop")}
-        >
-          <div className="flex items-center gap-2">
-            <TbMapSearch size={25} />
-            {t("Mapping")}
-          </div>
-        </Link>
-
-        {/* Catalogue with dropdown */}
-        <div>
-          <button
-            onClick={() => toggleDropdown("catalogue")}
-            className={linkClasses("/user/catalogue")}
+          {/* Mapping */}
+          <Link
+            to="/user/mapping"
+            className={linkClasses("/user/mapping")}
+            onClick={() => handleLinkClick("/user/mapping")}
           >
-            <div className="flex items-center gap-2">
-              <PiBooksBold size={25} />
-              {t("Catalogue")}
+            <div className="flex items-center gap-3">
+              <MapPin className="h-5 w-5" />
+              <span>{t("Mapping")}</span>
             </div>
-            {openDropdown === "catalogue" ? <IoChevronUp /> : <IoChevronDown />}
-          </button>
-          {openDropdown === "catalogue" && (
-            <div className="ml-12 flex flex-col text-sm text-gray-600 dark:text-white gap-2">
-              <Link
-                to="/user/libraries"
-                onClick={() => handleLinkClick("/user/libraries")}
-              >
-                Libraries
-              </Link>
-              <Link
-                to="/user/threats"
-                onClick={() => handleLinkClick("/user/threats")}
-              >
-                Threats
-              </Link>
-              <Link
-                to="/user/frameworks"
-                onClick={() => handleLinkClick("/user/frameworks")}
-              >
-                Frameworks
-              </Link>
+          </Link>
+
+          {/* Catalogue with dropdown */}
+          <div className="relative">
+            <button
+              onClick={() => toggleDropdown("catalogue")}
+              className={`w-full text-left ${linkClasses("/user/catalogue")}`}
+            >
+              <div className="flex items-center gap-3">
+                <BookOpen className="h-5 w-5" />
+                <span>{t("Catalogue")}</span>
+              </div>
+              {openDropdown === "catalogue" ? (
+                <ChevronUp className="h-4 w-4" />
+              ) : (
+                <ChevronDown className="h-4 w-4" />
+              )}
+            </button>
+            {openDropdown === "catalogue" && (
+              <div className="ml-9 mt-1 space-y-1 pl-3 border-l-2 border-indigo-200 dark:border-indigo-800">
+                <Link
+                  to="/user/libraries"
+                  onClick={() => handleLinkClick("/user/libraries")}
+                  className="block py-2 px-3 text-sm rounded-md hover:bg-indigo-50 dark:hover:bg-indigo-900/10 hover:text-indigo-600 dark:hover:text-indigo-400"
+                >
+                  Libraries
+                </Link>
+                <Link
+                  to="/user/threats"
+                  onClick={() => handleLinkClick("/user/threats")}
+                  className="block py-2 px-3 text-sm rounded-md hover:bg-indigo-50 dark:hover:bg-indigo-900/10 hover:text-indigo-600 dark:hover:text-indigo-400"
+                >
+                  Threats
+                </Link>
+                <Link
+                  to="/user/frameworks"
+                  onClick={() => handleLinkClick("/user/frameworks")}
+                  className="block py-2 px-3 text-sm rounded-md hover:bg-indigo-50 dark:hover:bg-indigo-900/10 hover:text-indigo-600 dark:hover:text-indigo-400"
+                >
+                  Frameworks
+                </Link>
+              </div>
+            )}
+          </div>
+
+          {/* Settings */}
+          <Link
+            to="/user/settings"
+            className={linkClasses("/user/settings")}
+            onClick={() => handleLinkClick("/user/settings")}
+          >
+            <div className="flex items-center gap-3">
+              <Settings className="h-5 w-5" />
+              <span>{t("leftside.settings")}</span>
             </div>
-          )}
+          </Link>
         </div>
 
         {/* Logout */}
-        <div className="pt-44 flex px-10 items-center text-red-500">
-          <LogoutButton />
+        <div className="absolute bottom-8 w-full px-6">
+          <div
+            to={"/"}
+            className="flex items-center gap-3 text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300 py-3 px-6 w-full rounded-lg hover:bg-red-50 dark:hover:bg-gray-900/10 transition-colors"
+          >
+            <LogOut onClick={handleLogout}  className="h-5 w-5" />
+            <span>Logout</span>
+          </div>
         </div>
       </div>
 
       {/* Main content */}
-      <div className="w-full dark:bg-main lg:w-[80%] py-28 px-10 ml-0 lg:ml-[20%]">
+      <div className="w-full dark:bg-gray-900 lg:w-[80%] py-20 px-6 md:px-10 ml-0 lg:ml-[20%]">
         <Outlet />
       </div>
     </div>

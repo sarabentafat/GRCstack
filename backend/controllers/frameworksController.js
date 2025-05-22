@@ -310,101 +310,68 @@ const createAuditFromMapping = async (req, res) => {
   const { projectId } = req.params;
   const { sourceAuditId, targetFrameworkId } = req.body;
 
-  console.log(projectId, sourceAuditId, targetFrameworkId);
+  console.log("Inputs:", { projectId, sourceAuditId, targetFrameworkId });
 
   try {
-//     const sourceAudit = await Audit.findById(sourceAuditId);
-//     if (!sourceAudit) {
-//       return res.status(404).json({ message: "Source audit not found." });
-//     }
+    const sourceAudit = await Audit.findById(sourceAuditId);
+    if (!sourceAudit) {
+      return res.status(404).json({ message: "Source audit not found." });
+    }
 
-//     const sourceFramework = await Framework.findById(sourceAudit.frameworkId);
-//     if (!sourceFramework) {
-//       return res.status(404).json({ message: "Source framework not found." });
-//     }
+    const sourceFramework = await Framework.findById(sourceAudit.frameworkId);
+    if (!sourceFramework) {
+      return res.status(404).json({ message: "Source framework not found." });
+    }
 
-//     const targetFramework = await Framework.findById(targetFrameworkId);
-//     if (!targetFramework) {
-//       return res.status(404).json({ message: "Target framework not found." });
-//     }
+    const targetFramework = await Framework.findById(targetFrameworkId);
+    if (!targetFramework) {
+      return res.status(404).json({ message: "Target framework not found." });
+    }
 
-//     const flatten = (levels) => {
-//       return levels.reduce((acc, lvl) => {
-//         acc.push(lvl);
-//         if (Array.isArray(lvl.children) && lvl.children.length > 0) {
-//           acc.push(...flatten(lvl.children));
-//         }
-//         return acc;
-//       }, []);
-//     };
+    // Directly using the original levels structure without flattening it
+    const formattedSource = { levels: sourceFramework.levels };
+    const formattedTarget = { levels: targetFramework.levels };
 
-//     const sourceLevels = flatten(sourceFramework.levels);
-//     const targetLevels = flatten(targetFramework.levels);
+    // Set up temporary directory to store the JSON files
+    const tempDir = path.join(__dirname, "temp");
+    await fs.mkdir(tempDir, { recursive: true });
 
-//     const formattedSource = {
-//       levels: sourceLevels.map((level) => ({
-//         level: level.level,
-//         level_name: level.level_name,
-//         identifier: level.identifier,
-//         title: level.title,
-//         content: level.content,
-//         is_ratable: level.is_ratable,
-//         status: level.status,
-//         evidence: level.evidence,
-//       })),
-//     };
+    const timestamp = Date.now();
+    const sourceFilePath = path.join(tempDir, `source_${timestamp}.json`);
+    const targetFilePath = path.join(tempDir, `target_${timestamp}.json`);
 
-//     const formattedTarget = {
-//       levels: targetLevels.map((level) => ({
-//         level: level.level,
-//         level_name: level.level_name,
-//         identifier: level.identifier,
-//         title: level.title,
-//         content: level.content,
-//         is_ratable: level.is_ratable,
-//         status: level.status,
-//         evidence: level.evidence,
-//       })),
-//     };
-// // console.log("Formatted Source:", formattedSource);
-//     const tempDir = path.join(__dirname, "temp");
-//     await fs.mkdir(tempDir, { recursive: true });
+    // Write the JSON files with the appropriate structure
+    await fs.writeFile(
+      sourceFilePath,
+      JSON.stringify(formattedSource, null, 2)
+    );
+    await fs.writeFile(
+      targetFilePath,
+      JSON.stringify(formattedTarget, null, 2)
+    );
+    console.log("Files written:", sourceFilePath, targetFilePath);
 
-//     const sourceFilePath = path.join(tempDir, "source.json");
-//     const targetFilePath = path.join(tempDir, "target.json");
+    // Prepare form data for API request
+    const form = new FormData();
+    form.append("file_a", fss.createReadStream(sourceFilePath));
+    form.append("file_b", fss.createReadStream(targetFilePath));
 
-//     await fs.writeFile(
-//       sourceFilePath,
-//       JSON.stringify(formattedSource, null, 2)
-//     );
-//     await fs.writeFile(
-//       targetFilePath,
-//       JSON.stringify(formattedTarget, null, 2)
-//     );
-// console.log("Files written:", sourceFilePath, targetFilePath);
-const tempDir = path.join(__dirname, "temp");
+    // Send request to the mapping service
+    const response = await axios.post("http://127.0.0.1:8000/map_json", form, {
+      headers: form.getHeaders(),
+      timeout: 60000, // 60 seconds timeout
+    });
 
-const sourceFilePath = path.join(tempDir, "source_1746670884146.json");
-const targetFilePath = path.join(tempDir, "target_1746670884146.json");
+    console.log(
+      "Mapping received. Number of mappings:",
+      response.data.mappings.length
+    );
 
-const form = new FormData();
-form.append("file_a", fss.createReadStream(sourceFilePath));
-form.append("file_b", fss.createReadStream(targetFilePath));
-
-const response = await axios.post("http://127.0.0.1:8000/map_json", form, {
-  headers: form.getHeaders(),
-  timeout: 60000, // 60 seconds, or increase as needed
-});
-
-console.log(
-  "Mapping received. Number of mappings:",
-  response.data.mappings.length
-);
-console.log("First mapping:", response.data.mappings[0]);
-  res.status(200).json({
-    message: "Mapping received",
-    mappings: response.data.mappings,
-  });
+    // Respond with the mappings
+    res.status(200).json({
+      message: "Mapping received",
+      mappings: response.data.mappings,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({
@@ -413,6 +380,8 @@ console.log("First mapping:", response.data.mappings[0]);
     });
   }
 };
+
+
 module.exports = {
   uploadFramework,
   getFrameworks,

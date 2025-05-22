@@ -1,71 +1,166 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { BiSolidSun } from "react-icons/bi";
-import { IoNotificationsOutline } from "react-icons/io5";
-import profilePic from "../assets/images/profile.jfif";
-import { Link } from "react-router-dom";
-import flame from "../assets/icons/flame.png";
-import score from "../assets/icons/gem.png";
-import { getUserMainProfile, getUserProfile } from "../redux/apiCalls/profileApiCall"; // Adjust the import path as needed
+"use client";
+
+import { useState, useEffect } from "react";
+import { Sun, Moon, Bell, User, Award, Diamond } from "lucide-react";
+import { useSelector } from "react-redux";
 
 const Nav = () => {
-  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
-  const [localUserProfile, setLocalUserProfile] = useState(null); // Local state for user profile
-
-  const dispatch = useDispatch();
+  const [theme, setTheme] = useState("light");
   const authUser = useSelector((state) => state.auth.user);
-  const streak = useSelector((state) => state.profile.streakLength);
-  console.log(streak);
-  const userProfile = useSelector((state) => state.profile.mainProfile);
-  useEffect(() => {
-    document.documentElement.className = theme;
-    localStorage.setItem("theme", theme);
-  }, [theme]);
+  
+
+  const [userProfile, setUserProfile] = useState({
+    username:authUser?.username,
+    profilePic:authUser.profilePic.url,
+    streak: 5,
+    score: 350,
+  });
+  const [notificationCount, setNotificationCount] = useState(3);
+
+  // Mock user ID for demo purposes
+  const userId = "user123";
 
   useEffect(() => {
-    if (authUser?._id) {
-      dispatch(getUserMainProfile(authUser?._id));
-    }
-  }, [dispatch, authUser]);
+    // Get theme from localStorage on component mount
+    const savedTheme = localStorage.getItem("theme") || "light";
+    setTheme(savedTheme);
+    document.documentElement.className = savedTheme;
 
-  useEffect(() => {
-    setLocalUserProfile(userProfile); // Update local state when userProfile changes
-  }, [userProfile]);
+    // Mock API call to fetch user profile
+    const fetchUserProfile = async () => {
+      try {
+        // In a real app, this would be an API call
+        // const response = await fetch(`/api/users/${userId}/profile`);
+        // const data = await response.json();
+        // setUserProfile(data);
+
+        // For demo, we'll just use the mock data
+        setTimeout(() => {
+          setUserProfile({
+            username: "Alex Johnson",
+            profilePic: { url: "/placeholder.svg?height=56&width=56" },
+            streak: 5,
+            score: 350,
+          });
+        }, 500);
+      } catch (error) {
+        console.error("Error fetching user profile:", error);
+      }
+    };
+
+    fetchUserProfile();
+  }, [userId]);
 
   const toggleTheme = () => {
-    setTheme(theme === "light" ? "dark" : "light");
+    const newTheme = theme === "light" ? "dark" : "light";
+    setTheme(newTheme);
+    localStorage.setItem("theme", newTheme);
+    document.documentElement.className = newTheme;
   };
 
-  // Handle null values for userProfile data
-  const profile = localUserProfile || {};
-
   return (
-    <div className="flex z-0 font-semibold w-[80%] justify-evenly items-center flex-row py-2 mt-5 absolute right-0 top-0">
-      <div className="md:w-[50%]">
-        {/* <input
-          type="text"
-          className="w-full rounded p-2"
-          placeholder="search"
-        /> */}
-      </div>
-      <div onClick={toggleTheme}>
-        <BiSolidSun size={27} className="cursor-pointer" />
-      </div>
+    <nav className="w-full bg-white dark:bg-gray-800 shadow-sm py-3 px-4 fixed top-0 right-0 z-10">
+      <div className="max-w-7xl mx-auto flex items-center justify-between">
+        {/* Logo/Brand */}
+        <div className="flex items-center">
+          <h1 className="text-xl font-bold text-indigo-600 dark:text-indigo-400">
+            GRC Audit
+          </h1>
+        </div>
 
-      <Link to={"notifications"} className="relative">
-        <IoNotificationsOutline size={27} className="text-blue-500" />
-        <div className="absolute top-1 right-1 bg-red-500 w-2 h-2 rounded"></div>
-      </Link>
+          {/* Theme Toggle */}
+          <button
+            onClick={toggleTheme}
+            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
+            aria-label={`Switch to ${
+              theme === "light" ? "dark" : "light"
+            } mode`}
+          >
+            {theme === "light" ? (
+              <Moon className="h-5 w-5 text-gray-700" />
+            ) : (
+              <Sun className="h-5 w-5 text-yellow-400" />
+            )}
+          </button>
 
-      <Link to={`profile/${authUser?._id}`} className="flex items-center">
-        <img
-          src={profile?.profilePic?.url || profilePic}
-          alt="profile"
-          className="rounded-full w-14 h-14"
-        />
-        <h1 className="ml-2 hidden md:block ">{profile?.username || "User"}</h1>
-      </Link>
-    </div>
+          {/* Notifications
+          <button
+            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors relative"
+            aria-label={`${notificationCount} notifications`}
+          >
+            <Bell className="h-5 w-5 text-gray-700 dark:text-gray-300" />
+            {notificationCount > 0 && (
+              <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                {notificationCount > 9 ? "9+" : notificationCount}
+              </span>
+            )}
+          </button> */}
+
+          {/* User Profile */}
+          <div className="relative group">
+            <button
+              className="flex items-center space-x-2 p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
+              aria-label="Open user menu"
+            >
+              <img
+                src={
+                  userProfile.profilePic?.url ||
+                  "/placeholder.svg?height=56&width=56"
+                }
+                alt="Profile"
+                className="h-8 w-8 rounded-full object-cover border-2 border-indigo-200 dark:border-indigo-800"
+              />
+              <span className="hidden md:block text-sm font-medium text-gray-700 dark:text-gray-200">
+                {userProfile.username}
+              </span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4 text-gray-500 dark:text-gray-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </button>
+
+            {/* Dropdown Menu */}
+            <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 z-10 hidden group-hover:block border border-gray-200 dark:border-gray-700">
+              <a
+                href={`/profile/${userId}`}
+                className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                Your Profile
+              </a>
+              <a
+                href="/settings"
+                className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                Settings
+              </a>
+              <a
+                href="/audits"
+                className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                Your Audits
+              </a>
+              <div className="border-t border-gray-200 dark:border-gray-700"></div>
+                <a
+                href="/logout"
+                className="block px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                Sign out
+              </a>
+            </div>
+          </div>
+        </div>
+   
+    </nav>
   );
 };
 

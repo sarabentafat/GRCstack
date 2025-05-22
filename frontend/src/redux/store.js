@@ -15,13 +15,10 @@ const store = configureStore({
   reducer: {
     auth: authReducer,
     profile: profileReducer,
-    level: levelReducer,
-    field:fieldReducer,
-    subfield:subfieldReducer,
     framework:frameworkReducer,
     project:projectReducer,
     audit:auditReducer,
-    packet:packetReducer
+
   },
 });
 export default store;
