@@ -208,7 +208,11 @@ const updateLevelStatusAndAudit = asyncHandler(async (req, res) => {
   const { projectId, auditId } = req.params;
   const { status, identifier } = req.body;
 
-  if (!["Compliant", "Non-Compliant", "Not Applicable"].includes(status)) {
+  if (
+    !["Not Started", "In Progress", "Compliant", "Non-Compliant"].includes(
+      status
+    )
+  ) {
     return res.status(400).json({ message: "Invalid status value." });
   }
 
