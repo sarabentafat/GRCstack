@@ -80,17 +80,17 @@ const LeftSide = () => {
         <div className="space-y-1 px-3">
           {/* Projects */}
           <Link
-            to="/user/projects"
+            to="/user/project/68176ffd81b99e822efb71a0"
             className={linkClasses("/user/projects")}
             onClick={() => handleLinkClick("/user/projects")}
           >
             <div className="flex items-center gap-3">
               <FolderOpen className="h-5 w-5" />
-              <span>{t("Projects")}</span>
+              <span>{t("Audits")}</span>
             </div>
           </Link>
 
-          {/* Governance */}
+          {/* Governance
           <Link
             to="/user/classes"
             className={linkClasses("/user/classes")}
@@ -100,10 +100,10 @@ const LeftSide = () => {
               <Crown className="h-5 w-5" />
               <span>{t("Governance")}</span>
             </div>
-          </Link>
+          </Link> */}
 
           {/* Risk */}
-          <Link
+          {/* <Link
             to="/user/documents"
             className={linkClasses("/user/documents")}
             onClick={() => handleLinkClick("/user/documents")}
@@ -112,7 +112,7 @@ const LeftSide = () => {
               <AlertTriangle className="h-5 w-5" />
               <span>{t("Risk")}</span>
             </div>
-          </Link>
+          </Link> */}
 
           {/* Compliance with dropdown */}
           <div className="relative">
@@ -224,7 +224,7 @@ const LeftSide = () => {
             to={"/"}
             className="flex items-center gap-3 text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300 py-3 px-6 w-full rounded-lg hover:bg-red-50 dark:hover:bg-gray-900/10 transition-colors"
           >
-            <LogOut onClick={handleLogout}  className="h-5 w-5" />
+            <LogOut onClick={handleLogout} className="h-5 w-5" />
             <span>Logout</span>
           </div>
         </div>

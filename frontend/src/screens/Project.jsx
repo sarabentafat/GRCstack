@@ -255,36 +255,12 @@ const Project = () => {
               <div>
                 <div className="flex items-center mb-2">
                   <h1 className="text-3xl font-bold text-gray-900">
-                    {project?.name}
+                  Audits
                   </h1>
-                  <span className="ml-3 px-3 py-1 text-xs font-medium bg-indigo-100 text-indigo-800 rounded-full">
-                    {project?.type || "Standard"}
-                  </span>
+
                 </div>
-                <p className="text-gray-600 mb-4">
-                  {project?.description || "No description provided"}
-                </p>
-                <div className="flex flex-wrap gap-4 text-sm text-gray-500">
-                  <div className="flex items-center">
-                    <CalendarIcon />
-                    <span className="ml-1">
-                      Created: {formatDate(project?.createdAt)}
-                    </span>
-                  </div>
-                  <div className="flex items-center">
-                    <UserIcon />
-                    <span className="ml-1">
-                      Owner: {project?.owner?.name || "Unknown"}
-                    </span>
-                  </div>
-                  <div className="flex items-center">
-                    <ClockIcon />
-                    <span className="ml-1">
-                      Last updated:{" "}
-                      {formatDate(project?.updatedAt || project?.createdAt)}
-                    </span>
-                  </div>
-                </div>
+
+
               </div>
               <button
                 onClick={toggleModal}

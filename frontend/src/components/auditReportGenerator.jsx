@@ -1,332 +1,948 @@
 "use client";
 
+import { jsPDF } from "jspdf";
+import autoTable from "jspdf-autotable";
 import { useState } from "react";
 import {
-  FileText,
-  Download,
-  Printer,
-  Mail,
-  X,
-  CheckCircle2,
-  XCircle,
-  Clock,
-  HelpCircle,
-} from "lucide-react";
+  FaFileAlt,
+  FaDownload,
+  FaEnvelope,
+  FaPrint,
+  FaCog,
+  FaChartBar,
+  FaCheckCircle,
+  FaTimesCircle,
+  FaClock,
+  FaExclamationTriangle,
+  FaEye,
+  FaTimes,
+} from "react-icons/fa";
 
-const AuditReportGenerator = ({ auditData, onClose}) => {
-    const safeOnClose = typeof onClose === "function" ? onClose : () => {};
-  const [reportFormat, setReportFormat] = useState("pdf");
-  const [includeEvidence, setIncludeEvidence] = useState(true);
-  const [includeFindings, setIncludeFindings] = useState(true);
-  const [includeRecommendations, setIncludeRecommendations] = useState(true);
+// Enhanced PDF generation function
+const generateEnhancedPDFReport = (auditData,stats, options) => {
+  console.log("Generating enhanced PDF report with options:", options);
+  console.log("Audit Data:", auditData);
+  console.log("Statistics:", stats);
+  const doc = new jsPDF();
+  let yPosition = 20;
+
+  // // Calculate statistics
+  // const stats = calculateAuditStats(auditData);
+
+  // Add header with logo and branding
+  addPDFHeader(doc, options, auditData);
+  yPosition = 60;
+
+  // Add executive summary if requested
+  if (options?.includeSummary) {
+    yPosition = addExecutiveSummary(doc, auditData, stats, yPosition);
+  }
+
+  // Add charts if requested
+  if (options?.includeCharts) {
+    yPosition = addChartsSection(doc, stats, yPosition);
+  }
+
+  // Add detailed findings table
+  yPosition = addDetailedFindings(doc, auditData, options, yPosition);
+
+  // Add recommendations if requested
+  if (options?.includeRecommendations) {
+    addRecommendationsSection(doc, auditData, yPosition);
+  }
+
+  // Add footer to all pages
+  addPDFFooter(doc, options);
+
+  // Save the PDF
+  const fileName = `${auditData.name.replace(
+    /[^a-z0-9]/gi,
+    "_"
+  )}_Audit_Report_${new Date().toISOString().split("T")[0]}.pdf`;
+  doc.save(fileName);
+};
+
+
+const addPDFHeader = (doc, options, auditData) => {
+  // Header background
+  doc.setFillColor(41, 128, 185);
+  doc.rect(0, 0, 210, 50, "F");
+
+  // Title
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(24);
+  doc.setFont("helvetica", "bold");
+  doc.text(options?.reportTitle || "Audit Compliance Report", 14, 25);
+
+  // Subtitle
+  doc.setFontSize(12);
+  doc.setFont("helvetica", "normal");
+  doc.text(`${auditData.name} - ${auditData.frameworkId.name}`, 14, 35);
+
+  // Company name
+  if (options?.companyName) {
+    doc.setFontSize(10);
+    doc.text(options.companyName, 14, 45);
+  }
+
+  // Reset text color
+  doc.setTextColor(0, 0, 0);
+};
+
+const addExecutiveSummary = (doc, auditData, stats, yPosition) => {
+  if (!stats) {
+    console.error("addExecutiveSummary: stats object is missing or undefined");
+    return yPosition;
+  }
+console.log("Adding Executive Summary with stats:", stats);
+  // Check if we need a new page
+  if (yPosition > 250) {
+    doc.addPage();
+    yPosition = 20;
+  }
+
+  doc.setFontSize(16);
+  doc.setFont("helvetica", "bold");
+  doc.text("Executive Summary", 14, yPosition);
+  yPosition += 15;
+
+  // Provide default values if some stats fields are missing
+  const summaryData = [
+    ["Total Controls", (stats.totalControls ?? 0).toString()],
+    ["Compliant", (stats.compliant ?? 0).toString()],
+    ["Non-Compliant", (stats.nonCompliant ?? 0).toString()],
+    ["In progress", (stats.inProgress ?? 0).toString()],
+    ["Not Started", (stats.notStarted ?? 0).toString()],
+    ["Compliance Rate", `${(stats.compliancePercentage ?? 0).toFixed(2)}%`],
+  ];
+
+  autoTable(doc, {
+    head: [["Metric", "Value"]],
+    body: summaryData,
+    startY: yPosition,
+    theme: "striped",
+    headStyles: { fillColor: [52, 152, 219] },
+    margin: { left: 14, right: 14 },
+    tableWidth: "auto",
+    columnStyles: {
+      0: { cellWidth: 60 },
+      1: { cellWidth: 40, halign: "center" },
+    },
+  });
+
+  return doc.lastAutoTable.finalY + 20;
+};
+
+
+const addChartsSection = (doc, stats, yPosition) => {
+  if (yPosition > 200) {
+    doc.addPage();
+    yPosition = 20;
+  }
+
+  doc.setFontSize(16);
+  doc.setFont("helvetica", "bold");
+  doc.text("Compliance Overview", 14, yPosition);
+  yPosition += 20;
+
+  // Simple bar chart representation
+  const chartData = [
+    { label: "Compliant", value: stats.compliant, color: [46, 204, 113] },
+    { label: "Non-Compliant", value: stats.nonCompliant, color: [231, 76, 60] },
+    { label: "Partial", value: stats.partial, color: [241, 196, 15] },
+    { label: "Not Assessed", value: stats.notAssessed, color: [149, 165, 166] },
+  ];
+
+  const maxValue = Math.max(...chartData.map((d) => d.value));
+  const barHeight = 15;
+  const barSpacing = 25;
+
+  chartData.forEach((item, index) => {
+    const barWidth = (item.value / maxValue) * 120;
+    const y = yPosition + index * barSpacing;
+
+    // Draw bar
+    doc.setFillColor(item.color[0], item.color[1], item.color[2]);
+    doc.rect(14, y, barWidth, barHeight, "F");
+
+    // Add label and value
+    doc.setFontSize(10);
+    doc.setTextColor(0, 0, 0);
+    doc.text(`${item.label}: ${item.value}`, 140, y + 10);
+  });
+
+  return yPosition + chartData.length * barSpacing + 20;
+};
+
+const addDetailedFindings = (doc, auditData, options, yPosition) => {
+  if (yPosition > 200) {
+    doc.addPage();
+    yPosition = 20;
+  }
+
+  doc.setFontSize(16);
+  doc.setFont("helvetica", "bold");
+  doc.text("Detailed Findings", 14, yPosition);
+  yPosition += 15;
+
+  // Prepare table data with enhanced structure
+  const tableData = [];
+  const processLevel = (items, parentPath = "") => {
+    items.forEach((item) => {
+      const currentPath = parentPath
+        ? `${parentPath}.${item.identifier}`
+        : item.identifier;
+
+      tableData.push({
+        identifier: item.identifier || "N/A",
+        title: item.title || "Untitled",
+        status: item.status || "not-assessed",
+        content: item.content || "No content provided",
+        path: currentPath,
+      });
+
+      if (item.children) {
+        processLevel(item.children, currentPath);
+      }
+    });
+  };
+
+  if (auditData.frameworkId?.levels) {
+    processLevel(auditData.frameworkId.levels);
+  }
+
+  // Enhanced table with better styling
+  autoTable(doc, {
+    head: [["ID", "Control/Requirement", "Status", "Description"]],
+    body: tableData.map((row) => [
+      row.identifier,
+      row.title,
+      row.status.toUpperCase(),
+      row.content.length > 100
+        ? row.content.substring(0, 100) + "..."
+        : row.content,
+    ]),
+    startY: yPosition,
+    theme: "grid",
+    styles: {
+      fontSize: 9,
+      cellPadding: 4,
+      overflow: "linebreak",
+      lineColor: [200, 200, 200],
+      lineWidth: 0.5,
+    },
+    headStyles: {
+      fillColor: [52, 152, 219],
+      textColor: [255, 255, 255],
+      fontStyle: "bold",
+      halign: "center",
+    },
+    columnStyles: {
+      0: { cellWidth: 25, halign: "center" },
+      1: { cellWidth: 60 },
+      2: { cellWidth: 30, halign: "center" },
+      3: { cellWidth: 75 },
+    },
+    didParseCell: (data) => {
+      if (data.column.index === 2 && data.section === "body") {
+        const status = data.cell.text[0]?.toLowerCase();
+        switch (status) {
+          case "compliant":
+            data.cell.styles.fillColor = [46, 204, 113];
+            data.cell.styles.textColor = [255, 255, 255];
+            break;
+          case "non-compliant":
+            data.cell.styles.fillColor = [231, 76, 60];
+            data.cell.styles.textColor = [255, 255, 255];
+            break;
+          case "partial":
+            data.cell.styles.fillColor = [241, 196, 15];
+            data.cell.styles.textColor = [0, 0, 0];
+            break;
+          case "not-assessed":
+            data.cell.styles.fillColor = [149, 165, 166];
+            data.cell.styles.textColor = [255, 255, 255];
+            break;
+        }
+      }
+    },
+  });
+
+  return doc.lastAutoTable.finalY + 20;
+};
+
+const addRecommendationsSection = (doc, auditData, yPosition) => {
+  doc.addPage();
+  yPosition = 20;
+
+  doc.setFontSize(16);
+  doc.setFont("helvetica", "bold");
+  doc.text("Recommendations", 14, yPosition);
+  yPosition += 15;
+
+  doc.setFontSize(12);
+  doc.setFont("helvetica", "normal");
+
+  const recommendations = [
+    "Implement regular compliance monitoring procedures",
+    "Establish clear documentation standards for all controls",
+    "Conduct periodic internal audits to maintain compliance",
+    "Provide comprehensive staff training on compliance requirements",
+    "Develop and test incident response procedures",
+    "Create a compliance dashboard for real-time monitoring",
+    "Establish regular review cycles for all policies and procedures",
+  ];
+
+  recommendations.forEach((rec, index) => {
+    doc.text(`${index + 1}. ${rec}`, 14, yPosition);
+    yPosition += 10;
+  });
+};
+
+const addPDFFooter = (doc, options) => {
+  const pageCount = doc.getNumberOfPages();
+
+  for (let i = 1; i <= pageCount; i++) {
+    doc.setPage(i);
+
+    // Footer line
+    doc.setDrawColor(200, 200, 200);
+    doc.line(14, 280, 196, 280);
+
+    // Footer text
+    doc.setFontSize(8);
+    doc.setTextColor(100, 100, 100);
+    doc.text(`Generated on ${new Date().toLocaleDateString()}`, 14, 285);
+    doc.text(`Page ${i} of ${pageCount}`, 196, 285, { align: "right" });
+
+    if (options?.companyName) {
+      doc.text(options?.companyName, 105, 285, { align: "center" });
+    }
+  }
+};
+
+const AuditReportGenerator = ({ auditData,stats, onClose }) => {
   const [generating, setGenerating] = useState(false);
+  const [activeTab, setActiveTab] = useState("preview");
+  const [reportOptions, setReportOptions] = useState({
+    includeCharts: true,
+    includeSummary: true,
+    includeRecommendations: true,
+    includeEvidence: false,
+    template: "standard",
+    companyName: "",
+    reportTitle: "Audit Compliance Report",
+    customNotes: "",
+  });
 
-  // Calculate statistics for the report
-  const stats = {
-    totalControls: 40,
-    compliant: 12,
-    nonCompliant: 5,
-    inProgress: 8,
-    notStarted: 15,
-    complianceRate: 30,
-    highRiskFindings: 2,
-    mediumRiskFindings: 3,
-    lowRiskFindings: 1,
-  };
+  const complianceRate = stats.compliancePercentage;
 
-  const generateReport = () => {
+  const handleGenerateReport = async () => {
     setGenerating(true);
-    setTimeout(() => {
+    try {
+      // Simulate processing time
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      generateEnhancedPDFReport(auditData,stats, reportOptions);
+    } catch (error) {
+      console.error("Error generating report:", error);
+    } finally {
       setGenerating(false);
-      const dummyLink = document.createElement("a");
-      dummyLink.href = "#";
-      dummyLink.setAttribute(
-        "download",
-        `${auditData?.name || "Audit"}-Report.${reportFormat}`
-      );
-      dummyLink.click();
-      safeOnClose(); // safe call
-    }, 2000);
+    }
   };
 
-  const handleClose = () => {
-    safeOnClose(); // safe call
+  const getStatusIcon = (status) => {
+    switch (status.toLowerCase()) {
+      case "compliant":
+        return <FaCheckCircle className="h-4 w-4 text-green-500" />;
+      case "non-compliant":
+        return <FaTimesCircle className="h-4 w-4 text-red-500" />;
+      case "partial":
+        return <FaExclamationTriangle className="h-4 w-4 text-yellow-500" />;
+      default:
+        return <FaClock className="h-4 w-4 text-gray-500" />;
+    }
   };
-  
+
+  const getStatusBadge = (status) => {
+    const colors = {
+      compliant: "bg-green-100 text-green-800 border-green-200",
+      "non-compliant": "bg-red-100 text-red-800 border-red-200",
+      partial: "bg-yellow-100 text-yellow-800 border-yellow-200",
+      "not-assessed": "bg-gray-100 text-gray-800 border-gray-200",
+    };
+    return (
+      <span
+        className={`px-2 py-1 text-xs font-medium rounded-full border ${
+          colors[status] || colors["not-assessed"]
+        }`}
+      >
+        {status.replace("-", " ").toUpperCase()}
+      </span>
+    );
+  };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-        <div className="p-6 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
-          <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200 flex items-center">
-            <FileText className="h-5 w-5 mr-2 text-indigo-600 dark:text-indigo-400" />
-            Generate Audit Roadmap Report
-          </h2>
-          <button
-            onClick={handleClose}
-            className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-          >
-            <X className="h-5 w-5" />
-          </button>
+    <div className="max-w-6xl mx-auto p-6 space-y-6">
+      {/* Header Card */}
+      <div className="bg-white rounded-lg shadow-md border">
+        <div className="p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                <FaFileAlt className="h-6 w-6" />
+                Enhanced Audit Report Generator
+              </h1>
+              <p className="text-gray-600 mt-1">
+                Generate comprehensive audit reports with professional styling
+                and customizable options
+              </p>
+            </div>
+            {onClose && (
+              <button
+                onClick={onClose}
+                className="px-4 py-2 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50 flex items-center gap-2"
+              >
+                <FaTimes className="h-4 w-4" />
+                Close
+              </button>
+            )}
+          </div>
         </div>
+      </div>
 
-        {/* Rest of the component remains the same */}
-        <div className="p-6 space-y-6">
-          <div className="bg-indigo-50 dark:bg-indigo-900/20 p-4 rounded-lg border border-indigo-100 dark:border-indigo-800">
-            <h3 className="font-medium text-indigo-800 dark:text-indigo-300 mb-2">
-              Report Information
-            </h3>
-            <div className="grid grid-cols-2 gap-4 text-sm">
-              <div>
-                <p className="text-gray-600 dark:text-gray-400">Audit Name:</p>
-                <p className="font-medium text-gray-800 dark:text-gray-200">
-                  {auditData?.name || "Unnamed Audit"}
-                </p>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Audit Overview */}
+        <div className="lg:col-span-2 bg-white rounded-lg shadow-md border">
+          <div className="p-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">
+              Audit Overview
+            </h2>
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700">
+                    Audit Name
+                  </label>
+                  <p className="text-sm text-gray-600">
+                    {auditData?.name || "Unnamed Audit"}
+                  </p>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700">
+                    Framework
+                  </label>
+                  <p className="text-sm text-gray-600">
+                    {auditData?.frameworkId?.name || "N/A"}
+                  </p>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700">
+                    Audit ID
+                  </label>
+                  <p className="text-sm text-gray-600 font-mono">
+                    {auditData?._id || "N/A"}
+                  </p>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700">
+                    Generated
+                  </label>
+                  <p className="text-sm text-gray-600">
+                    {new Date().toLocaleDateString()}
+                  </p>
+                </div>
               </div>
-              <div>
-                <p className="text-gray-600 dark:text-gray-400">Framework:</p>
-                <p className="font-medium text-gray-800 dark:text-gray-200">
-                  {auditData?.frameworkId?.name}{" "}
-                  {auditData?.frameworkId?.version}
-                </p>
-              </div>
-              <div>
-                <p className="text-gray-600 dark:text-gray-400">
-                  Date Generated:
-                </p>
-                <p className="font-medium text-gray-800 dark:text-gray-200">
-                  {new Date().toLocaleDateString()}
-                </p>
-              </div>
-              <div>
-                <p className="text-gray-600 dark:text-gray-400">
-                  Compliance Rate:
-                </p>
-                <p className="font-medium text-gray-800 dark:text-gray-200">
-                  {stats.complianceRate}%
+
+              <hr className="border-gray-200" />
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">
+                  Description
+                </label>
+                <p className="text-sm text-gray-600">
+                  {auditData?.description || "No description provided"}
                 </p>
               </div>
             </div>
           </div>
+        </div>
 
-          <div className="space-y-4">
-            <h3 className="font-medium text-gray-800 dark:text-gray-200">
-              Report Options
-            </h3>
+        {/* Compliance Statistics */}
+        <div className="bg-white rounded-lg shadow-md border">
+          <div className="p-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
+              <FaChartBar className="h-5 w-5" />
+              Compliance Overview
+            </h2>
+            <div className="space-y-4">
+              <div className="text-center">
+                <div className="text-3xl font-bold text-green-600">
+                  {complianceRate}%
+                </div>
+                <p className="text-sm text-gray-600">Overall Compliance</p>
+              </div>
 
-            <div className="space-y-3">
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div
+                  className="bg-green-600 h-2 rounded-full transition-all duration-300"
+                  style={{ width: `${complianceRate}%` }}
+                ></div>
+              </div>
+
+              <div className="space-y-3">
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center gap-2">
+                    <FaCheckCircle className="h-4 w-4 text-green-500" />
+                    <span className="text-sm">Compliant</span>
+                  </div>
+                  <span className="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">
+                    {stats.compliant}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center gap-2">
+                    <FaTimesCircle className="h-4 w-4 text-red-500" />
+                    <span className="text-sm">Non-Compliant</span>
+                  </div>
+                  <span className="px-2 py-1 text-xs font-medium rounded-full bg-red-100 text-red-800">
+                    {stats.nonCompliant}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center gap-2">
+                    <FaExclamationTriangle className="h-4 w-4 text-yellow-500" />
+                    <span className="text-sm">In progress</span>
+                  </div>
+                  <span className="px-2 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">
+                    {stats.inProgress}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center gap-2">
+                    <FaClock className="h-4 w-4 text-gray-500" />
+                    <span className="text-sm">Not Started</span>
+                  </div>
+                  <span className="px-2 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-800">
+                    {stats.notStarted}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Tabs */}
+      <div className="bg-white rounded-lg shadow-md border">
+        <div className="border-b border-gray-200">
+          <nav className="flex space-x-8 px-6">
+            <button
+              onClick={() => setActiveTab("preview")}
+              className={`py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2 ${
+                activeTab === "preview"
+                  ? "border-blue-500 text-blue-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+              }`}
+            >
+              <FaEye className="h-4 w-4" />
+              Preview
+            </button>
+            <button
+              onClick={() => setActiveTab("settings")}
+              className={`py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2 ${
+                activeTab === "settings"
+                  ? "border-blue-500 text-blue-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+              }`}
+            >
+              <FaCog className="h-4 w-4" />
+              Settings
+            </button>
+            <button
+              onClick={() => setActiveTab("generate")}
+              className={`py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2 ${
+                activeTab === "generate"
+                  ? "border-blue-500 text-blue-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+              }`}
+            >
+              <FaDownload className="h-4 w-4" />
+              Generate
+            </button>
+          </nav>
+        </div>
+
+        <div className="p-6">
+          {activeTab === "preview" && (
+            <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Report Format
-                </label>
-                <div className="flex space-x-4">
-                  <label className="flex items-center">
-                    <input
-                      type="radio"
-                      name="format"
-                      value="pdf"
-                      checked={reportFormat === "pdf"}
-                      onChange={() => setReportFormat("pdf")}
-                      className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-                    />
-                    <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">
-                      PDF
-                    </span>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  Report Preview
+                </h3>
+                <p className="text-gray-600 mb-4">
+                  Preview of the controls that will be included in your report
+                </p>
+              </div>
+              <div className="space-y-4 max-h-96 overflow-y-auto">
+                {auditData?.frameworkId?.levels?.map((level, levelIndex) => (
+                  <div key={levelIndex} className="border rounded-lg p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="font-semibold">
+                        {level.identifier}: {level.title}
+                      </h4>
+                      {getStatusBadge(level.status)}
+                    </div>
+                    <p className="text-sm text-gray-600 mb-3">
+                      {level.content}
+                    </p>
+
+                    {level.children && (
+                      <div className="space-y-2 ml-4">
+                        {level.children.map((principle, principleIndex) => (
+                          <div
+                            key={principleIndex}
+                            className="border-l-2 border-gray-200 pl-4"
+                          >
+                            <div className="flex items-center justify-between mb-1">
+                              <h5 className="text-sm font-medium">
+                                {principle.identifier}: {principle.title}
+                              </h5>
+                              {getStatusIcon(principle.status)}
+                            </div>
+                            <p className="text-xs text-gray-600">
+                              {principle.content}
+                            </p>
+
+                            {principle.children && (
+                              <div className="space-y-1 ml-4 mt-2">
+                                {principle.children.map(
+                                  (control, controlIndex) => (
+                                    <div
+                                      key={controlIndex}
+                                      className="flex items-center justify-between text-xs"
+                                    >
+                                      <span>
+                                        {control.identifier}: {control.title}
+                                      </span>
+                                      {getStatusIcon(control.status)}
+                                    </div>
+                                  )
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {activeTab === "settings" && (
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  Report Configuration
+                </h3>
+                <p className="text-gray-600 mb-4">
+                  Customize your report settings and branding
+                </p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label
+                    htmlFor="reportTitle"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Report Title
                   </label>
-                  <label className="flex items-center">
-                    <input
-                      type="radio"
-                      name="format"
-                      value="xlsx"
-                      checked={reportFormat === "xlsx"}
-                      onChange={() => setReportFormat("xlsx")}
-                      className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-                    />
-                    <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">
-                      Excel
-                    </span>
+                  <input
+                    id="reportTitle"
+                    type="text"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    value={reportOptions?.reportTitle}
+                    onChange={(e) =>
+                      setReportOptions((prev) => ({
+                        ...prev,
+                        reportTitle: e.target.value,
+                      }))
+                    }
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label
+                    htmlFor="companyName"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Company Name
                   </label>
-                  <label className="flex items-center">
-                    <input
-                      type="radio"
-                      name="format"
-                      value="docx"
-                      checked={reportFormat === "docx"}
-                      onChange={() => setReportFormat("docx")}
-                      className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-                    />
-                    <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">
-                      Word
-                    </span>
-                  </label>
+                  <input
+                    id="companyName"
+                    type="text"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    value={reportOptions?.companyName}
+                    onChange={(e) =>
+                      setReportOptions((prev) => ({
+                        ...prev,
+                        companyName: e.target.value,
+                      }))
+                    }
+                  />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Report Content
+                <label
+                  htmlFor="template"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Report Template
                 </label>
-                <div className="space-y-2">
-                  <label className="flex items-center">
-                    <input
-                      type="checkbox"
-                      checked={includeEvidence}
-                      onChange={() => setIncludeEvidence(!includeEvidence)}
-                      className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-                    />
-                    <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">
-                      Include Evidence
-                    </span>
-                  </label>
-                  <label className="flex items-center">
-                    <input
-                      type="checkbox"
-                      checked={includeFindings}
-                      onChange={() => setIncludeFindings(!includeFindings)}
-                      className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-                    />
-                    <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">
-                      Include Findings
-                    </span>
-                  </label>
-                  <label className="flex items-center">
-                    <input
-                      type="checkbox"
-                      checked={includeRecommendations}
-                      onChange={() =>
-                        setIncludeRecommendations(!includeRecommendations)
-                      }
-                      className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-                    />
-                    <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">
-                      Include Recommendations
-                    </span>
-                  </label>
+                <select
+                  id="template"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  value={reportOptions?.template}
+                  onChange={(e) =>
+                    setReportOptions((prev) => ({
+                      ...prev,
+                      template: e.target.value,
+                    }))
+                  }
+                >
+                  <option value="standard">Standard Report</option>
+                  <option value="executive">Executive Summary</option>
+                  <option value="detailed">Detailed Analysis</option>
+                </select>
+              </div>
+
+              <div className="space-y-4">
+                <label className="block text-sm font-medium text-gray-700">
+                  Report Sections
+                </label>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <label
+                      htmlFor="includeSummary"
+                      className="text-sm text-gray-700"
+                    >
+                      Executive Summary
+                    </label>
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <input
+                        id="includeSummary"
+                        type="checkbox"
+                        className="sr-only peer"
+                        checked={reportOptions?.includeSummary}
+                        onChange={(e) =>
+                          setReportOptions((prev) => ({
+                            ...prev,
+                            includeSummary: e.target.checked,
+                          }))
+                        }
+                      />
+                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                    </label>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <label
+                      htmlFor="includeCharts"
+                      className="text-sm text-gray-700"
+                    >
+                      Charts & Visualizations
+                    </label>
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <input
+                        id="includeCharts"
+                        type="checkbox"
+                        className="sr-only peer"
+                        checked={reportOptions?.includeCharts}
+                        onChange={(e) =>
+                          setReportOptions((prev) => ({
+                            ...prev,
+                            includeCharts: e.target.checked,
+                          }))
+                        }
+                      />
+                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                    </label>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <label
+                      htmlFor="includeRecommendations"
+                      className="text-sm text-gray-700"
+                    >
+                      Recommendations
+                    </label>
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <input
+                        id="includeRecommendations"
+                        type="checkbox"
+                        className="sr-only peer"
+                        checked={reportOptions?.includeRecommendations}
+                        onChange={(e) =>
+                          setReportOptions((prev) => ({
+                            ...prev,
+                            includeRecommendations: e.target.checked,
+                          }))
+                        }
+                      />
+                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                    </label>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <label
+                      htmlFor="includeEvidence"
+                      className="text-sm text-gray-700"
+                    >
+                      Evidence & Documentation
+                    </label>
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <input
+                        id="includeEvidence"
+                        type="checkbox"
+                        className="sr-only peer"
+                        checked={reportOptions?.includeEvidence}
+                        onChange={(e) =>
+                          setReportOptions((prev) => ({
+                            ...prev,
+                            includeEvidence: e.target.checked,
+                          }))
+                        }
+                      />
+                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                    </label>
+                  </div>
                 </div>
+              </div>
+
+              <div className="space-y-2">
+                <label
+                  htmlFor="customNotes"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Custom Notes
+                </label>
+                <textarea
+                  id="customNotes"
+                  rows={4}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="Add any custom notes or comments for the report..."
+                  value={reportOptions?.customNotes}
+                  onChange={(e) =>
+                    setReportOptions((prev) => ({
+                      ...prev,
+                      customNotes: e.target.value,
+                    }))
+                  }
+                />
               </div>
             </div>
-          </div>
+          )}
 
-          <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg border border-gray-200 dark:border-gray-600">
-            <h3 className="font-medium text-gray-800 dark:text-gray-200 mb-3">
-              Report Preview
-            </h3>
-
-            <div className="space-y-4">
-              <div className="flex justify-between items-center">
-                <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Compliance Summary
-                </h4>
+          {activeTab === "generate" && (
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  Generate Report
+                </h3>
+                <p className="text-gray-600 mb-4">
+                  Ready to generate your professional audit report
+                </p>
               </div>
 
-              <div className="grid grid-cols-4 gap-3">
-                <div className="bg-green-50 dark:bg-green-900/20 p-3 rounded-lg border border-green-100 dark:border-green-800 text-center">
-                  <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400 mx-auto mb-1" />
-                  <div className="text-lg font-bold text-green-700 dark:text-green-400">
-                    {stats.compliant}
-                  </div>
-                  <div className="text-xs text-green-600 dark:text-green-500">
-                    Compliant
-                  </div>
-                </div>
-
-                <div className="bg-red-50 dark:bg-red-900/20 p-3 rounded-lg border border-red-100 dark:border-red-800 text-center">
-                  <XCircle className="h-5 w-5 text-red-600 dark:text-red-400 mx-auto mb-1" />
-                  <div className="text-lg font-bold text-red-700 dark:text-red-400">
-                    {stats.nonCompliant}
-                  </div>
-                  <div className="text-xs text-red-600 dark:text-red-500">
-                    Non-Compliant
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="border rounded-lg p-4">
+                  <div className="flex items-center gap-3">
+                    <FaFileAlt className="h-8 w-8 text-blue-500" />
+                    <div>
+                      <h4 className="font-semibold">PDF Report</h4>
+                      <p className="text-sm text-gray-600">
+                        Comprehensive PDF document
+                      </p>
+                    </div>
                   </div>
                 </div>
-
-                <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg border border-blue-100 dark:border-blue-800 text-center">
-                  <Clock className="h-5 w-5 text-blue-600 dark:text-blue-400 mx-auto mb-1" />
-                  <div className="text-lg font-bold text-blue-700 dark:text-blue-400">
-                    {stats.inProgress}
-                  </div>
-                  <div className="text-xs text-blue-600 dark:text-blue-500">
-                    In Progress
+                <div className="border rounded-lg p-4">
+                  <div className="flex items-center gap-3">
+                    <FaEnvelope className="h-8 w-8 text-green-500" />
+                    <div>
+                      <h4 className="font-semibold">Email Report</h4>
+                      <p className="text-sm text-gray-600">Send via email</p>
+                    </div>
                   </div>
                 </div>
-
-                <div className="bg-gray-50 dark:bg-gray-600 p-3 rounded-lg border border-gray-200 dark:border-gray-700 text-center">
-                  <HelpCircle className="h-5 w-5 text-gray-600 dark:text-gray-400 mx-auto mb-1" />
-                  <div className="text-lg font-bold text-gray-700 dark:text-gray-300">
-                    {stats.notStarted}
-                  </div>
-                  <div className="text-xs text-gray-600 dark:text-gray-400">
-                    Not Started
+                <div className="border rounded-lg p-4">
+                  <div className="flex items-center gap-3">
+                    <FaPrint className="h-8 w-8 text-purple-500" />
+                    <div>
+                      <h4 className="font-semibold">Print Ready</h4>
+                      <p className="text-sm text-gray-600">
+                        Optimized for printing
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-4">
-                <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Risk Summary
-                </h4>
-                <div className="space-y-2">
-                  <div className="flex items-center">
-                    <div className="w-3 h-3 rounded-full bg-red-500 mr-2"></div>
-                    <span className="text-sm text-gray-700 dark:text-gray-300">
-                      High Risk Findings: {stats.highRiskFindings}
+              {generating && (
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                    <span className="text-sm">
+                      Generating your professional report...
                     </span>
                   </div>
-                  <div className="flex items-center">
-                    <div className="w-3 h-3 rounded-full bg-yellow-500 mr-2"></div>
-                    <span className="text-sm text-gray-700 dark:text-gray-300">
-                      Medium Risk Findings: {stats.mediumRiskFindings}
-                    </span>
-                  </div>
-                  <div className="flex items-center">
-                    <div className="w-3 h-3 rounded-full bg-blue-500 mr-2"></div>
-                    <span className="text-sm text-gray-700 dark:text-gray-300">
-                      Low Risk Findings: {stats.lowRiskFindings}
-                    </span>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div
+                      className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                      style={{ width: "75%" }}
+                    ></div>
                   </div>
                 </div>
+              )}
+
+              <div className="flex gap-3">
+                <button
+                  onClick={handleGenerateReport}
+                  disabled={generating}
+                  className={`flex-1 px-6 py-3 rounded-md text-white font-semibold flex items-center justify-center gap-2 ${
+                    generating
+                      ? "bg-gray-400 cursor-not-allowed"
+                      : "bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                  }`}
+                >
+                  {generating ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      Generating...
+                    </>
+                  ) : (
+                    <>
+                      <FaDownload className="h-4 w-4" />
+                      Generate Enhanced PDF Report
+                    </>
+                  )}
+                </button>
+                <button
+                  disabled={generating}
+                  className="px-6 py-3 border border-gray-300 rounded-md text-gray-700 font-semibold hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 flex items-center gap-2"
+                >
+                  <FaEnvelope className="h-4 w-4" />
+                  Email
+                </button>
+                <button
+                  disabled={generating}
+                  className="px-6 py-3 border border-gray-300 rounded-md text-gray-700 font-semibold hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 flex items-center gap-2"
+                >
+                  <FaPrint className="h-4 w-4" />
+                  Print
+                </button>
               </div>
             </div>
-          </div>
-        </div>
-
-        <div className="p-4 border-t border-gray-200 dark:border-gray-700 flex justify-between">
-          <div className="flex space-x-2">
-            <button
-              className="px-3 py-2 bg-white border border-gray-300 rounded text-gray-700 text-sm flex items-center hover:bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-600"
-              onClick={handleClose}
-            >
-              Cancel
-            </button>
-            <button className="px-3 py-2 bg-white border border-gray-300 rounded text-gray-700 text-sm flex items-center hover:bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-600">
-              <Printer className="h-4 w-4 mr-1" />
-              Print Preview
-            </button>
-            <button className="px-3 py-2 bg-white border border-gray-300 rounded text-gray-700 text-sm flex items-center hover:bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-600">
-              <Mail className="h-4 w-4 mr-1" />
-              Email Report
-            </button>
-          </div>
-
-          <button
-            className={`px-4 py-2 bg-indigo-600 text-white rounded text-sm flex items-center hover:bg-indigo-700 transition-colors ${
-              generating ? "opacity-75 cursor-not-allowed" : ""
-            }`}
-            onClick={generateReport}
-            disabled={generating}
-          >
-            {generating ? (
-              <>
-                <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white mr-2"></div>
-                Generating...
-              </>
-            ) : (
-              <>
-                <Download className="h-4 w-4 mr-1" />
-                Generate Report
-              </>
-            )}
-          </button>
+          )}
         </div>
       </div>
     </div>

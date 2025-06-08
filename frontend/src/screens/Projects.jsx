@@ -87,9 +87,9 @@ const Projects = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Projects</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Audits</h1>
           <p className="mt-1 text-sm text-gray-500">
-            Manage your compliance projects and audits
+            Manage your compliance and audits
           </p>
         </div>
         <Link
@@ -303,7 +303,7 @@ const Projects = () => {
             </svg>
           </div>
           <h3 className="text-lg font-medium text-gray-900 mb-1">
-            No projects found
+            No Audits found
           </h3>
           <p className="text-gray-500 mb-6">
             {searchTerm || filterStatus !== "All" || filterType !== "All"

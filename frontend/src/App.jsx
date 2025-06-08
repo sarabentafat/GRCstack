@@ -106,7 +106,7 @@ const router = createBrowserRouter([
         element: <Classes />,
       },
       {
-        path: "accueil",
+        path: "project/:id",
         element: <Accueil />,
       },
       {
@@ -126,50 +126,7 @@ const router = createBrowserRouter([
         path: "classes/profile/:profileId",
         element: <Profile />,
       },
-      {
-        path: "packet/edit/:id",
-        element: <UpdatePacket />,
-      },
-      {
-        path: "favorite/packet/:id",
-        element: <Packet />,
-      },
-      {
-        path: "documents/packet/:id",
-        element: <Packet />,
-      },
-      {
-        path: "documents/folder",
-        element: <Folder />,
-      },
 
-      {
-        path: "notifications",
-        element: <Notifications />,
-      },
-
-      {
-        path: "shop",
-        element: <Store />,
-      },
-      {
-        path: "favorite",
-        element: <Favorite />,
-      },
-      {
-        path: "packet/:id",
-        element: <Packet />,
-      },
-
-      {
-        path: "book/:id",
-        element: <Book />,
-      },
-
-      {
-        path: "documents",
-        element: <Documents />,
-      },
       {
         path: "documents/field/:id",
         element: <Field />,

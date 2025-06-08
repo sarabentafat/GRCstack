@@ -117,7 +117,7 @@ const CreateAudit = ({ projectId, toggleModal }) => {
     <div className="space-y-6">
       {/* Form Header */}
       <div className="border-b border-gray-200 pb-4">
-        <h3 className="text-lg font-medium text-gray-900">Create New Audit</h3>
+      
         <p className="mt-1 text-sm text-gray-500">
           Fill in the details below to create a new audit for your project.
         </p>

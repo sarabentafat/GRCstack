@@ -13,6 +13,8 @@ const LevelSchema = new mongoose.Schema(
     title: String,
     content: String,
     is_ratable: { type: Boolean, default: false },
+    question: String,
+    evidence_recommendation: String,
     status: {
       type: String,
       enum: ["Not Started", "In Progress", "Compliant", "Non-Compliant"],

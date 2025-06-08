@@ -1,209 +1,125 @@
 {
-  "home": {
-    "home": "Accueil",
-    "about": "À propos",
-    "services": "Services",
-    "contact": "Contact",
-    "login": "Se connecter",
-    "welcome": "Avec Brainy Apprenez, testez et progressez intelligemment",
-    "learning_description": "Notre plateforme offre une manière unique de tester vos connaissances, renforcer votre apprentissage et défier vos amis—tout en vous amusant.",
-    "platform_description": "",
-    "signup": "S'inscrire",
-    "image_placeholder": "Ajoutez votre image ici"
+  "header": {
+    "features": "Fonctionnalités",
+    "howItWorks": "Comment ça marche",
+    "faq": "FAQ",
+    "login": "Connexion",
+    "signup": "S'inscrire"
   },
-  "about": {
-    "section1": {
-      "title": "Utilisez nos cartes mémoire et la méthode de répétition espacée pour renforcer votre mémoire à long terme pour une meilleure rétention.",
-      "smallText": "Optimisation de la mémorisation",
-      "details": "Des rappels intelligents vous guideront dans vos révisions, vous aidant à ancrer durablement les connaissances."
-    },
-    "section2": {
-      "title": "Suivez vos performances en temps réel avec des graphiques clairs et détaillés. Visualisez votre progression et analysez vos résultats pour ajuster votre stratégie d'apprentissage.",
-      "smallText": "Suivi de votre évolution",
-      "details": "Des rapports détaillés vous aident à identifier vos points forts et à concentrer vos efforts là où c'est nécessaire."
-    },
-    "section3": {
-      "title": "Participez à des quiz interactifs adaptés à votre niveau. Recevez des feedbacks instantanés pour corriger vos erreurs et améliorer vos compétences.",
-      "smallText": "Testez vos connaissances",
-      "details": "Les quiz sont régulièrement mis à jour pour refléter les dernières tendances et les avancées dans chaque domaine d'étude."
-    },
-    "section4": {
-      "title": "Accédez à des quiz basés sur des cours régulièrement mis à jour par notre équipe d'experts, vous garantissant ainsi des contenus toujours actuels et pertinents.",
-      "smallText": "Cours mis à jour régulièrement",
-      "details": "Les quiz sont régulièrement mis à jour pour refléter les dernières tendances et les avancées dans chaque domaine d'étude."
-    }
+  "hero": {
+    "title": "Simplifiez votre parcours",
+    "highlight": "conformité",
+    "description": "GrcStack vous aide à gérer la Gouvernance, les Risques et la Conformité avec un mapping propulsé par l'IA, des audits automatisés, et des visualisations claires — tout cela dans une plateforme open-source puissante.",
+    "github": "Dépôt GitHub",
+    "openSource": "100% Open Source",
+    "manageCompliance": "Gérez votre conformité",
+    "aiMapping": "Mapping propulsé par IA"
   },
-  "footer": {
-    "aboutUs": "À propos de nous",
-    "aboutBrainy": "À propos de Brainy",
-    "howItWorks": "Comment fonctionne Brainy ?",
-    "advertise": "Faire de la publicité avec nous",
-    "getApp": "Obtenir l'application",
-    "resources": "Ressources",
-    "helpCenter": "Centre d'aide",
-    "privacyPolicy": "Politique de confidentialité",
-    "termsOfService": "Conditions d'utilisation",
-    "contact": "Contact",
-    "followUs": "Suivez-nous",
-    "copyright": "© {{year}} Brainy. Tous droits réservés."
-  },
-  "motiv": {
-    "get_better_grades": "Obtenez de meilleures notes avec la plateforme d'apprentissage n°1 en Algérie",
-    "discover_enhanced_learning": "Découvrez un apprentissage plus approfondi avec Brainy Plus",
-    "train_and_track": "Entraînez-vous et suivez vos progrès",
-    "optimize_studies": "Optimisez vos études avec nos nouvelles fonctionnalités d'IA de pointe",
-    "millions_of_courses": "Des millions de cours de confiance",
-    "combined_power": "Comprenez les devoirs difficiles grâce à la puissance combinée de l'IA et des solutions rédigées par des experts",
-    "advanced_tools": "Optimisez vos études",
-    "level_up": "Passez au niveau supérieur avec Brainy Plus",
-    "modern_interface": "Profitez d'une interface moderne et d'outils d'apprentissage intelligents pour améliorer vos résultats académiques."
-  },
-  "login": {
-    "welcome": "Bienvenue",
-    "email_label": "Email",
-    "email_placeholder": "Entrer votre email",
-    "password_label": "Mot de passe",
-    "password_placeholder": "Entrer votre mot de passe",
-    "submit_button": "Connexion",
-    "no_account": "Vous n'avez pas de compte ?",
-    "create_account": "Créez-en un ici",
-    "error_message": "Une erreur s'est produite lors de la connexion."
-  },
-  "signup": {
-    "title": "Inscription",
-    "username": "Nom d'utilisateur",
-    "usernamePlaceholder": "Entrez votre nom d'utilisateur",
-    "email": "Email",
-    "emailPlaceholder": "Entrez votre email",
-    "phoneNumber": "Numéro de téléphone",
-    "phoneNumberPlaceholder": "Entrez votre numéro de téléphone",
-    "gender": "Genre",
-    "genderPlaceholder": "Sélectionnez votre genre",
-    "genderMale": "Homme",
-    "genderFemale": "Femme",
-    "address": "Adresse",
-    "addressPlaceholder": "Entrez votre adresse",
-    "password": "Mot de passe",
-    "passwordPlaceholder": "Entrez votre mot de passe",
-    "confirmPassword": "Confirmer le mot de passe",
-    "confirmPasswordPlaceholder": "Confirmez votre mot de passe",
-    "checkAvailability": "Vérifier la disponibilité",
-    "next": "Suivant"
-  },
-  "errors": {
-    "usernameRequired": "Le nom d'utilisateur est requis",
-    "firstnameRequired": "Le prénom est requis",
-    "secondnameRequired": "Le nom de famille est requis",
-    "emailRequired": "L'email est requis",
-    "emailInvalid": "Adresse email invalide",
-    "phonenumberRequired": "Le numéro de téléphone est requis",
-    "genderRequired": "Le genre est requis",
-    "addressRequired": "L'adresse est requise",
-    "passwordRequired": "Le mot de passe est requis",
-    "passwordLength": "Le mot de passe doit comporter au moins 6 caractères",
-    "passwordMismatch": "Les mots de passe ne correspondent pas",
-    "emailExists": "L'email est déjà utilisé",
-    "usernameExists": "Le nom d'utilisateur est déjà utilisé",
-    "verificationError": "Une erreur est survenue lors de la vérification",
-    "registrationFailed": "L'inscription a échoué"
-  },
-  "leftside": {
-    "brandName": "Brainy",
-    "home": "Accueil",
-    "explore": "Explorer",
-    "modules": "Mes modules",
-    "favorites": "Mes favoris",
-    "settings": "Paramètres",
-    "shop": "Shop"
-  },
-  "store": {
-    "title": "Boutique",
-    "welcome": "Bienvenue dans notre boutique ! Découvrez nos plans premium et convertissez vos gemmes.",
-    "gemIconAlt": "Icône de gemme",
-    "planOneMonth": {
-      "title": "Plan Premium - 1 mois",
-      "description": "Accès complet pendant 1 mois",
-      "price": "500 DA"
-    },
-    "planThreeMonths": {
-      "title": "Plan Premium - 3 mois",
-      "description": "Accès complet pendant 3 mois",
-      "price": "1200 DA"
-    },
-    "planSixMonths": {
-      "title": "Plan Premium - 6 mois",
-      "description": "Accès complet pendant 6 mois",
-      "price": "2200 DA"
-    },
-    "convertGems": {
-      "title": "Convertir les Gemmes",
-      "description": "Convertissez vos gemmes en plans premium !",
-      "oneMonth": {
-        "title": "Plan Premium - 1 mois",
-        "gems": "10 Gemmes"
+  "howItWorksSection": {
+    "title": "Comment fonctionne GrcStack",
+    "description": "Notre plateforme simplifie la gestion de la conformité en quatre étapes faciles.",
+    "steps": {
+      "step1": {
+        "title": "Importer des cadres",
+        "desc": "Choisissez parmi notre bibliothèque de cadres de conformité préchargés ou importez vos exigences personnalisées."
       },
-      "threeMonths": {
-        "title": "Plan Premium - 3 mois",
-        "gems": "25 Gemmes"
+      "step2": {
+        "title": "Mapping IA",
+        "desc": "Notre IA cartographie automatiquement les contrôles entre les cadres, identifiant les chevauchements et relations."
       },
-      "sixMonths": {
-        "title": "Plan Premium - 6 mois",
-        "gems": "40 Gemmes"
+      "step3": {
+        "title": "Évaluer & Surveiller",
+        "desc": "Suivez le statut de conformité, collectez des preuves et surveillez les changements avec des évaluations automatisées."
+      },
+      "step4": {
+        "title": "Rapporter & Améliorer",
+        "desc": "Générez des rapports prêts pour l’audit et obtenez des informations exploitables pour améliorer votre posture de conformité."
       }
     },
-    "buy": "Acheter",
-    "convert": "Convertir"
+    "githubButton": "Voir sur GitHub"
   },
-  "settings": {
-    "title": "Paramètres",
-    "personalInfo": "Informations personnelles",
-    "profilePicture": "Photo de profil",
-    "username": "Nom d'utilisateur",
-    "usernamePlaceholder": "Entrez votre nom d'utilisateur",
-    "bio": "Biographie",
-    "bioPlaceholder": "Entrez votre biographie",
-    "email": "E-mail",
-    "emailPlaceholder": "Entrez votre e-mail",
-    "changePassword": "Changer le mot de passe",
-    "currentPassword": "Mot de passe actuel",
-    "newPassword": "Nouveau mot de passe",
-    "changeLanguage": "Changer la langue",
-    "profileVisibility": "Visibilité du profil",
-    "public": "Public",
-    "private": "Privé",
-    "educationalCurriculum": "Curriculum éducatif",
-    "level": "Niveau",
-    "saveChanges": "Enregistrer les modifications",
-    "saving": "Enregistrement...",
-    "changeProfilePicture": "Changer la photo de profil",
-    "save": "Enregistrer",
-    "cancel": "Annuler"
+  "faqSection": {
+    "title": "Foire aux questions",
+    "description": "Vous trouverez ici les réponses aux questions les plus fréquemment posées.",
+    "stillHaveQuestions": "Vous avez encore des questions ?",
+    "joinDiscussion": "Rejoignez la discussion sur GitHub",
+    "items": [
+      {
+        "question": "Quelle est la mission de ce projet ?",
+        "answer": "Notre projet vise à faciliter la gestion des audits et la conformité des normes GRC."
+      },
+      {
+        "question": "Comment puis-je contribuer au projet ?",
+        "answer": "Vous pouvez contribuer en participant aux discussions sur GitHub ou en proposant des améliorations via des pull requests."
+      },
+      {
+        "question": "Le projet est-il open source ?",
+        "answer": "Oui, le projet est entièrement open source et disponible sur GitHub."
+      }
+   
+    ]
   },
-  "classes": {
-    "title": "Les packets créés récemment"
+  "footer": {
+    "brand": "GrcStack",
+    "description": "Simplify compliance management with AI-powered open-source solutions.",
+    "githubLabel": "Sara Bentafat GitHub",
+    "product": "Product",
+    "features": "Features",
+    "documentation": "Documentation",
+    "community": "Community",
+    "about": "About",
+    "support": "Support",
+    "contactUs": "Contact Us",
+    "copyright": "Developed by Sara Bentafat",
+    "email": "s_bentafat@estin.dz"
   },
-  "packet": {
-    "loading": "Chargement...",
-    "Flashcards": "Cartes",
-    "Quiz": "Quiz",
-    "MatchingGame": "Jeu ",
-    "Test": "Test",
-    "createdBy": "Créé par",
-    "share": "Partager",
-    "questions": "Les questions du packet",
-    "noData": "Aucune donnée disponible"
+  "cta": {
+    "title": "Ready to Transform Your Compliance Process?",
+    "description": "Join hundreds of organizations trusting GrcStack to simplify their compliance journey.",
+    "starOnGithub": "Star on GitHub",
+    "scheduleDemo": "Schedule a Demo",
+    "freeForever": "100% open source. Free forever."
   },
-  "matchinggame": {
-    "game_title": "Prêt à jouer ?",
-    "game_instructions": "Associez tous les termes à leurs définitions aussi vite que possible",
-    "start_game": "Commencer",
-    "rounds_label": "Nombre de rounds :",
-    "timer_label": "Durée du timer (en minutes) :",
-    "results_congratulations": "Félicitations ! Vous avez terminé le jeu.",
-    "results_title": "Jeu terminé !",
-    "results_replay": "Rejouer"
+  "newsletter": {
+    "title": "Stay Updated with GRC News",
+    "description": "Subscribe to our newsletter for compliance tips, industry updates, and GrcStack news.",
+    "emailPlaceholder": "Enter your email",
+    "subscribe": "Subscribe",
+    "privacyNotice": "We respect your privacy. You can unsubscribe at any time.",
+    "emailLabel": "Email Address"
   },
-  "ad": {
-    "message": "Créez un compte 100% gratuit en étant parmi nos premiers abonnés ! Offre valable pendant 1 mois seulement !"
+  "features": {
+    "title": "Fonctionnalités puissantes pour une conformité moderne",
+    "description": "GrcStack combine une technologie puissante avec un design intuitif pour transformer la gestion de votre conformité.",
+    "feature1": {
+      "title": "Cartographie assistée par IA",
+      "desc": "Notre IA avancée identifie automatiquement les relations entre différents cadres de conformité, vous faisant gagner des heures de travail manuel.",
+      "items": [
+        "Cartographie inter-cadres",
+        "Réduction de 80 % du temps de cartographie",
+        "Mises à jour continues pour les nouvelles normes"
+      ],
+      "learnMore": "En savoir plus"
+    },
+    "feature2": {
+      "title": "Tableaux de bord visuels",
+      "desc": "Des visualisations intuitives vous aident à comprendre votre posture de conformité en un coup d'œil et à identifier rapidement les lacunes.",
+      "items": [
+        "Statut de conformité en temps réel",
+        "Cartes de chaleur des risques personnalisables",
+        "Rapports prêts pour la direction"
+      ],
+      "learnMore": "En savoir plus"
+    },
+    "feature3": {
+      "title": "Audits automatisés",
+      "desc": "Rationalisez votre processus d’audit avec la collecte automatique de preuves, les tests et les rapports.",
+      "items": [
+        "Collecte automatique de preuves",
+        "Surveillance continue de la conformité",
+        "Documentation prête pour l’audit"
+      ],
+      "learnMore": "En savoir plus"
+    }
   }
 }

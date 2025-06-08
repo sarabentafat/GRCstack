@@ -11,12 +11,11 @@ i18n
   .init({
     resources: {
       en: { translation: translationEN },
-      ar: { translation: translationAR },
       fr: { translation: translationFR },
     },
     // Default language (will be overridden by language in localStorage if present)
-    lng: localStorage.getItem("i18nextLng") || "en",
-    fallbackLng: "en",
+    lng: localStorage.getItem("i18nextLng") || "fr",
+    fallbackLng: "fr",
     interpolation: {
       escapeValue: false,
     },

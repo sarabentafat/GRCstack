@@ -21,7 +21,17 @@ const parseExcelRowsToTree = (rows) => {
       continue;
     }
 
-    const [level, level_name, identifier, title, content, is_ratable] = row;
+    const [
+      level,
+      level_name,
+      identifier,
+      title,
+      content,
+      is_ratable,
+      question,
+      evidence_recommendation,
+    ] = row;
+    
 
     const levelNum =
       level != null && !isNaN(parseInt(level, 10)) ? parseInt(level, 10) : 1;
@@ -57,6 +67,8 @@ const parseExcelRowsToTree = (rows) => {
         is_ratable === "VRAI" || is_ratable === true || is_ratable === "true",
       status: "Not Started",
       evidence: [],
+      question,
+      evidence_recommendation,
       children: [],
     };
 
@@ -121,7 +133,16 @@ const uploadFramework = async (req, res) => {
         "rateable",
         "evaluable",
       ],
+      question: ["question","questions", "query", "inquiry", "prompt"],
+      evidence_recommendation: [
+        "evidence_recommendation",
+        "evidence",
+        "recommendation",
+        "suggestion",
+        "advice",
+      ],
     };
+    console.log("Header Map:", headerMap);
 
     const rawHeaders = rows[0];
     const headers = rawHeaders.map((h) => h?.toString().toLowerCase().trim());
@@ -167,6 +188,7 @@ const uploadFramework = async (req, res) => {
       version: req.body.version?.trim() || "1.0",
       provider: req.body.provider?.trim() || "Unknown",
       language: req.body.language?.trim() || "en",
+
     });
 
     await framework.save();

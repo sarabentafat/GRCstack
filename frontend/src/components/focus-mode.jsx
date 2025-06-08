@@ -10,6 +10,8 @@ import {
   Upload,
   AlertTriangle,
 } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { updateLevelStatus } from "../redux/apiCalls/auditApiCall";
 
 const statusColors = {
   "Not Started": "bg-gray-100 text-gray-600 border-gray-300",
@@ -38,7 +40,22 @@ const FocusMode = ({
   const [evidenceFile, setEvidenceFile] = useState(null);
   const [evidenceDescription, setEvidenceDescription] = useState("");
   const [currentStatus, setCurrentStatus] = useState("");
+const dispatch = useDispatch();
+console.log("*******************");
+useEffect(() => {
+handleStatusUpdte('2',"Compliant")
+}
 
+)
+const handleStatusUpdte = (identifier, status) => {
+  const identifierstatus = {
+    identifier: identifier, 
+    status: status,
+  };
+  const projectId = auditData?.projectId;
+  const auditId = auditData?._id;
+  dispatch(updateLevelStatus(projectId,auditId,identifierstatus));
+}
   useEffect(() => {
     const extractRatableControls = (levels, parentTitle = "") => {
       let controls = [];
@@ -79,7 +96,15 @@ const FocusMode = ({
     }
   }, [auditData]);
   
-  const handleStatusChange = (status) => {
+  const handleStatusChange = (identifier,status) => {
+    console.log("handleStatusChange called with:", identifier, status);
+    const identifierstatus = {
+      identifier: identifier,
+      status: status,
+    };
+    const projectId = auditData?.projectId;
+    const auditId = auditData?._id;
+    dispatch(updateLevelStatus(projectId, auditId, identifierstatus));
     setCurrentStatus(status);
     updateControlStatus(activeControl.identifier, status);
   };
@@ -224,7 +249,18 @@ const FocusMode = ({
                         : "No detailed description available for this control."}
                     </p>
                   </div>
-
+                  <div className="mb-6">
+                    <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      questions d'audit
+                    </h4>
+                    <div className="bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-600">
+                      <p className="text-gray-600 dark:text-gray-400">
+                        {/* Mock recommendations based on control ID */}
+                        {activeControl.question ||
+                          "No specific audit questions provided for this control."}
+                      </p>
+                    </div>
+                  </div>
                   <div className="mb-6">
                     <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Recommendations
@@ -232,13 +268,8 @@ const FocusMode = ({
                     <div className="bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-600">
                       <p className="text-gray-600 dark:text-gray-400">
                         {/* Mock recommendations based on control ID */}
-                        {activeControl.identifier.includes("1")
-                          ? "Ensure firewall configurations are properly documented and reviewed quarterly. Implement network segmentation to isolate cardholder data environment."
-                          : activeControl.identifier.includes("2")
-                          ? "Implement strong password policies with minimum 12 characters and complexity requirements. Remove default vendor accounts and passwords."
-                          : activeControl.identifier.includes("3")
-                          ? "Encrypt transmission of cardholder data across open, public networks using strong cryptography and security protocols."
-                          : "Implement security controls according to industry best practices and maintain documentation of compliance."}
+                        {activeControl.evidence_recommendation ||
+                          "No specific recommendations provided for this control."}
                       </p>
                     </div>
                   </div>
@@ -249,7 +280,12 @@ const FocusMode = ({
                     </h4>
                     <div className="flex flex-wrap gap-2">
                       <button
-                        onClick={() => handleStatusChange("Compliant")}
+                        onClick={() =>
+                          handleStatusChange(
+                            activeControl.identifier,
+                            "Compliant"
+                          )
+                        }
                         className="px-3 py-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 flex items-center gap-1 dark:bg-green-900/20 dark:text-green-400 dark:hover:bg-green-900/40"
                       >
                         <CheckCircle2 className="h-4 w-4" />
@@ -257,7 +293,12 @@ const FocusMode = ({
                       </button>
 
                       <button
-                        onClick={() => handleStatusChange("Non-Compliant")}
+                        onClick={() =>
+                          handleStatusChange(
+                            activeControl.identifier,
+                            "Non-Compliant"
+                          )
+                        }
                         className="px-3 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 flex items-center gap-1 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/40"
                       >
                         <XCircle className="h-4 w-4" />
@@ -265,7 +306,12 @@ const FocusMode = ({
                       </button>
 
                       <button
-                        onClick={() => handleStatusChange("In Progress")}
+                        onClick={() =>
+                          handleStatusChange(
+                            activeControl.identifier,
+                            "In Progress"
+                          )
+                        }
                         className="px-3 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 flex items-center gap-1 dark:bg-blue-900/20 dark:text-blue-400 dark:hover:bg-blue-900/40"
                       >
                         <Loader2 className="h-4 w-4" />
@@ -273,7 +319,12 @@ const FocusMode = ({
                       </button>
 
                       <button
-                        onClick={() => handleStatusChange("Not Applicable")}
+                        onClick={() =>
+                          handleStatusChange(
+                            activeControl.identifier,
+                            "Not Applicable"
+                          )
+                        }
                         className="px-3 py-2 bg-purple-100 text-purple-700 rounded-lg hover:bg-purple-200 flex items-center gap-1 dark:bg-purple-900/20 dark:text-purple-400 dark:hover:bg-purple-900/40"
                       >
                         <HelpCircle className="h-4 w-4" />

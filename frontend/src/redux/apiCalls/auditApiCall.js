@@ -18,7 +18,8 @@ console.log("*********token", token);
     console.log("*********audit", response.data);
 
     if (response.data && response.data.audit) {
-      dispatch(auditActions.setAudit(response.data.audit));
+      dispatch(auditActions.setAudit(response.data));
+      dis
     } else {
       dispatch(auditActions.setError("No audit found in response"));
     }
@@ -51,6 +52,63 @@ export const createAudit = (projectId,auditData) => async (dispatch, getState) =
 
     if (response.data && response.data.audit) {
       dispatch(auditActions.setAudit(response.data.audit)); // Store the new audit
+    } else {
+      dispatch(auditActions.setError("Failed to create audit"));
+    }
+  } catch (error) {
+    dispatch(
+      auditActions.setError(error.response?.data?.message || error.message)
+    );
+  } finally {
+    dispatch(auditActions.setLoading(false));
+  }
+};
+export const updateLevelStatus=
+  (projectId,levelId, statusidentifier) => async (dispatch, getState) => {
+    try {
+      const token = getState().auth.user?.token;
+      if (!token) {
+        throw new Error("No authentication token found");
+      }
+      const response = await request.put(
+        `/api/audits/${projectId}/${levelId}/status`,
+        statusidentifier,
+        {
+          headers: {
+            Authorization: `Bearer ${token.accessToken}`,
+          },
+        }
+      );
+
+      console.log("level updated ", response.data);
+
+    } catch (error) {
+      dispatch(
+        auditActions.setError(error.response?.data?.message || error.message)
+      );
+    } finally {
+      dispatch(auditActions.setLoading(false));
+    }
+  };
+// Create a new audit
+export const getAuditDetails = (projectId,auditData) => async (dispatch, getState) => {
+  try {
+    const token = getState().auth.user?.token;
+    if (!token) {
+      throw new Error("No authentication token found");
+    }
+
+    dispatch(auditActions.setLoading(true));
+
+    const response = await request.post(`/api/audits/${projectId}`, auditData, {
+      headers: {
+        Authorization: `Bearer ${token.accessToken}`,
+      },
+    });
+
+  
+    if (response.data) {
+      dispatch(auditActions.setDetails(response.data)); // Store the new audit
     } else {
       dispatch(auditActions.setError("Failed to create audit"));
     }

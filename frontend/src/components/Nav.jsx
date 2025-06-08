@@ -2,23 +2,27 @@
 
 import { useState, useEffect } from "react";
 import { Sun, Moon, Bell, User, Award, Diamond } from "lucide-react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutUser } from "../redux/apiCalls/authApiCall";
 
 const Nav = () => {
+  const dispatch = useDispatch();
   const [theme, setTheme] = useState("light");
   const authUser = useSelector((state) => state.auth.user);
-  
-
+  console.log("Auth User:", authUser);
+const handlelogout = () => {
+  dispatch(logoutUser());
+  // Handle logout logic here }
+}
   const [userProfile, setUserProfile] = useState({
     username:authUser?.username,
     profilePic:authUser.profilePic.url,
     streak: 5,
     score: 350,
   });
-  const [notificationCount, setNotificationCount] = useState(3);
 
-  // Mock user ID for demo purposes
-  const userId = "user123";
+  // // Mock user ID for demo purposes
+  const userId = authUser?._id;
 
   useEffect(() => {
     // Get theme from localStorage on component mount
@@ -37,8 +41,8 @@ const Nav = () => {
         // For demo, we'll just use the mock data
         setTimeout(() => {
           setUserProfile({
-            username: "Alex Johnson",
-            profilePic: { url: "/placeholder.svg?height=56&width=56" },
+            username:authUser?.username || "John Doe",
+            profilePic:authUser?.profilePic?.url,
             streak: 5,
             score: 350,
           });
@@ -60,13 +64,8 @@ const Nav = () => {
 
   return (
     <nav className="w-full bg-white dark:bg-gray-800 shadow-sm py-3 px-4 fixed top-0 right-0 z-10">
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
+      <div className="max-w-7xl mx-auto flex  justify-end items-center space-x-4">
         {/* Logo/Brand */}
-        <div className="flex items-center">
-          <h1 className="text-xl font-bold text-indigo-600 dark:text-indigo-400">
-            GRC Audit
-          </h1>
-        </div>
 
           {/* Theme Toggle */}
           <button
@@ -83,18 +82,6 @@ const Nav = () => {
             )}
           </button>
 
-          {/* Notifications
-          <button
-            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors relative"
-            aria-label={`${notificationCount} notifications`}
-          >
-            <Bell className="h-5 w-5 text-gray-700 dark:text-gray-300" />
-            {notificationCount > 0 && (
-              <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                {notificationCount > 9 ? "9+" : notificationCount}
-              </span>
-            )}
-          </button> */}
 
           {/* User Profile */}
           <div className="relative group">
@@ -104,7 +91,7 @@ const Nav = () => {
             >
               <img
                 src={
-                  userProfile.profilePic?.url ||
+                  userProfile.profilePic||
                   "/placeholder.svg?height=56&width=56"
                 }
                 alt="Profile"
@@ -151,9 +138,10 @@ const Nav = () => {
               </a>
               <div className="border-t border-gray-200 dark:border-gray-700"></div>
                 <a
-                href="/logout"
+                href="/"
+                onClick={handlelogout}
                 className="block px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700"
-              >
+            >
                 Sign out
               </a>
             </div>

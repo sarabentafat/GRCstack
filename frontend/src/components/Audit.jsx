@@ -52,8 +52,9 @@ const Audit = () => {
   const [filterRatableOnly, setFilterRatableOnly] = useState(false);
 
   const dispatch = useDispatch();
-  const auditData = useSelector((state) => state.audit.audit);
-
+  const data = useSelector((state) => state.audit.audit);
+const auditData=data?.audit;
+const stats=data?.stats;
   useEffect(() => {
     dispatch(getauditFromProjectById(id, auditId));
     setLoading(false);
@@ -780,13 +781,13 @@ const Audit = () => {
                           Overall Completion
                         </span>
                         <span className="font-medium text-gray-800 dark:text-gray-200">
-                          45%
+                          {stats.compliancePercentage}%
                         </span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-600">
                         <div
                           className="bg-indigo-500 h-2.5 rounded-full"
-                          style={{ width: "45%" }}
+                          style={{ width: `${stats.compliancePercentage}%` }}
                         ></div>
                       </div>
                     </div>
@@ -800,10 +801,10 @@ const Audit = () => {
                             </div>
                             <div className="ml-3">
                               <div className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                                Compliant
+                                compliant
                               </div>
                               <div className="text-lg font-semibold text-gray-900 dark:text-white">
-                                12
+                                {stats?.compliant || 0}
                               </div>
                             </div>
                           </div>
@@ -821,7 +822,7 @@ const Audit = () => {
                                 Non-Compliant
                               </div>
                               <div className="text-lg font-semibold text-gray-900 dark:text-white">
-                                5
+                                {stats?.nonCompliant || 0}
                               </div>
                             </div>
                           </div>
@@ -839,7 +840,7 @@ const Audit = () => {
                                 In Progress
                               </div>
                               <div className="text-lg font-semibold text-gray-900 dark:text-white">
-                                8
+                                {stats?.inProgress || 0}
                               </div>
                             </div>
                           </div>
@@ -857,7 +858,7 @@ const Audit = () => {
                                 Not Started
                               </div>
                               <div className="text-lg font-semibold text-gray-900 dark:text-white">
-                                15
+                                {stats?.notStarted || 0}
                               </div>
                             </div>
                           </div>
@@ -954,6 +955,7 @@ const Audit = () => {
             {showReportGenerator && (
               <AuditReportGenerator
                 auditData={auditData}
+                stats={stats}
                 onClose={() => setShowReportGenerator(false)}
               />
             )}

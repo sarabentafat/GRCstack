@@ -168,37 +168,77 @@ const deleteAuditFromProject = asyncHandler(async (req, res) => {
 const getAuditFromProject = asyncHandler(async (req, res) => {
   const { projectId, auditId } = req.params;
 
-  // Validate projectId and auditId
   if (!projectId || !auditId) {
     return res
       .status(400)
       .json({ message: "projectId and auditId are required." });
   }
 
-
-
-  // Verify project exists
   const project = await Project.findById(projectId);
   if (!project) {
     return res.status(404).json({ message: "Project not found" });
   }
 
-  // Verify audit belongs to the project
   if (!project.audits.includes(auditId)) {
-    return res.status(400).json({ message: "Audit does not belong to this project" });
+    return res
+      .status(400)
+      .json({ message: "Audit does not belong to this project" });
   }
 
-  // Fetch audit and populate frameworkId
   const audit = await Audit.findById(auditId).populate("frameworkId");
   if (!audit) {
     return res.status(404).json({ message: "Audit not found" });
   }
 
+  const framework = audit.frameworkId;
+  const ratableControls = [];
+
+  // Recursively collect all is_ratable levels
+  const collectRatable = (levels) => {
+    levels.forEach((level) => {
+      if (level.is_ratable) ratableControls.push(level);
+      if (level.children?.length) {
+        collectRatable(level.children);
+      }
+    });
+  };
+
+  collectRatable(framework.levels || []);
+
+  const totalControls = ratableControls.length;
+  const compliant = ratableControls.filter(
+    (c) => c.status === "Compliant"
+  ).length;
+  const nonCompliant = ratableControls.filter(
+    (c) => c.status === "Non-Compliant"
+  ).length;
+  const notStarted = ratableControls.filter(
+    (c) => c.status === "Not Started"
+  ).length;
+  const inProgress = ratableControls.filter(
+    (c) => c.status === "In Progress"
+  ).length;
+
+  const compliancePercentage =
+    totalControls > 0 ? Math.round((compliant / totalControls) * 100) : 0;
+
+  const stats = {
+    totalControls,
+    compliant,
+    nonCompliant,
+    inProgress,
+    notStarted,
+    compliancePercentage,
+  };
+
   res.status(200).json({
-    message: "Audit retrieved successfully",
+    message: "Audit and stats retrieved successfully",
     audit,
+    stats,
   });
 });
+
+
 
  /* @desc    Update level status and recalculate audit status
  * @route   PUT /api/audits/:auditId/levels/:levelId/status
@@ -287,6 +327,87 @@ const updateLevelStatusAndAudit = asyncHandler(async (req, res) => {
     auditStatus: formattedPercentage,
   });
 });
+/**----------------------------------------------
+ * @desc    Get audit details and level stats
+ * @route   GET /api/projects/:projectId/audits/:auditId/stats
+ * @method  GET
+ * @access  Private
+ * ----------------------------------------------*/
+
+const getAuditStats = asyncHandler(async (req, res) => {
+  const { projectId, auditId } = req.params;
+
+  if (!projectId || !auditId) {
+    return res.status(400).json({ message: "projectId and auditId are required." });
+  }
+
+  const project = await Project.findById(projectId);
+  if (!project) {
+    return res.status(404).json({ message: "Project not found" });
+  }
+
+  if (!project.audits.includes(auditId)) {
+    return res.status(400).json({ message: "Audit does not belong to this project" });
+  }
+
+  const audit = await Audit.findById(auditId).populate("frameworkId");
+  if (!audit) {
+    return res.status(404).json({ message: "Audit not found" });
+  }
+
+  const framework = audit.frameworkId;
+
+  if (!framework || !framework.levels || framework.levels.length === 0) {
+    return res.status(404).json({ message: "No levels found in the associated framework." });
+  }
+
+  // Flatten nested levels (recursive)
+  const flattenLevels = (levels) => {
+    let result = [];
+    for (const level of levels) {
+      result.push(level);
+      if (level.children && level.children.length > 0) {
+        result = result.concat(flattenLevels(level.children));
+      }
+    }
+    return result;
+  };
+
+  const allLevels = flattenLevels(framework.levels);
+
+  const statusCounts = {
+    "Compliant": 0,
+    "Non-Compliant": 0,
+    "In Progress": 0,
+    "Not Started": 0,
+  };
+
+  for (const level of allLevels) {
+    const status = level.status || "Not Started";
+    if (statusCounts[status] !== undefined) {
+      statusCounts[status]++;
+    } else {
+      statusCounts[status] = 1; // In case of unexpected status
+    }
+  }
+
+  const total = allLevels.length;
+  const compliant = statusCounts["Compliant"] || 0;
+  const completionPercentage = total > 0 ? Math.round((compliant / total) * 100) : 0;
+
+  res.status(200).json({
+    message: "Audit stats retrieved successfully",
+    audit: {
+      id: audit._id,
+      name: audit.name,
+      framework: framework.name,
+    },
+    levelStatusCounts: statusCounts,
+    totalLevels: total,
+    completionPercentage,
+  });
+});
+
 
 
 module.exports = {
@@ -295,6 +416,5 @@ module.exports = {
   getAuditFromProject,
   addAuditToProject,
   updateLevelStatusAndAudit,
-  
-  
+  getAuditStats,
 };
