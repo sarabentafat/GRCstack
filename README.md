@@ -36,9 +36,12 @@ The platform combines a modern web UI with a smart backend capable of **detectin
 
 ---
 
+
+---
+
 ## 🔁 Mapping Microservice (AI-Powered Control Mapping)
 
-The `mapping/` folder contains a **FastAPI-based microservice** designed to intelligently compare and map controls between different standards using semantic similarity.
+The `mapping/` folder contains a **FastAPI-based microservice** designed to intelligently compare and map controls between different standards using **semantic similarity**.
 
 ### 💡 Overview
 
@@ -47,13 +50,40 @@ The `mapping/` folder contains a **FastAPI-based microservice** designed to inte
 - Encodes them with `paraphrase-MiniLM-L6-v2`
 - Compares embeddings using **cosine similarity**
 - Returns matched pairs with a similarity score and summary
+- 🧠 **In Development**: Adds automatic **mapping classification** into:
+  - `Equivalent` — controls have the same intent  
+  - `Subset` — control A is a more specific form of B  
+  - `Superset` — control A is more general than B  
+  - `Non-Equivalent` — unrelated or dissimilar controls
+
+This classification aims to **enhance audit accuracy** and provide **clear traceability** across compliance frameworks.
 
 ---
 
 ### 🚀 How to Run the Mapping API
 
-1. **Navigate to the folder**:
+To run the full GRCStack system (AI Mapping + Web Platform), follow these steps:
+
+---
+
+#### 🧠 Start the Mapping Microservice (FastAPI)
+
+1. Navigate to the mapping service folder:
    ```bash
-   cd backend/mapping
-Start the API server:
+   cd mappingscripts
+Run the API server:
 uvicorn main:app --reload
+📍 Access the API at: http://localhost:8000/docs
+
+🧩 Start the Web Backend (Node.js)
+Navigate to the backend folder:
+
+cd web/backend
+Start the development server:
+npm run dev
+
+🎨 Start the Frontend (React)
+Open a new terminal and go to the frontend:
+cd web/frontend
+Launch the React app:
+npm start
