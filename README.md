@@ -77,13 +77,16 @@ uvicorn main:app --reload
 
 🧩 Start the Web Backend (Node.js)
 Navigate to the backend folder:
-
+ ```bash
 cd web/backend
+
 Start the development server:
-npm run dev
+  ```bash
+  npm run dev
 
 🎨 Start the Frontend (React)
 Open a new terminal and go to the frontend:
 cd web/frontend
 Launch the React app:
+ ```bash
 npm start
