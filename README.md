@@ -1,6 +1,6 @@
 # 🔐 GRCStack 
 
-**GRCStack** is a full-stack web platform that automates the auditing and mapping of **GRC (Governance, Risk, and Compliance)** standards such as **SWIFT CSCF**, **PCI DSS**, and Algerian frameworks.
+**GRCStack** is a full-stack web platform that automates the auditing and mapping of **GRC (Governance, Risk, and Compliance)** standards such as **ISO 27001**, **PCI DSS**,"SWIFT CSCF",....
 
 The platform combines a modern web UI with a smart backend capable of **detecting control similarities** using NLP and vector embeddings to **automate cross-standard mapping**.
 
